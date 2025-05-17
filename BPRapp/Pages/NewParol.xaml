@@ -1,0 +1,29 @@
+﻿<Page x:Class="BPRapp.Pages.NewParol"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BPRapp.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="NewParol">
+
+    <Grid>
+        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
+            <Label Content="ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
+        </Grid>
+
+        <Grid Margin="0,45,0,0" Background="White">
+            <Label Content="Восстановление пароля" HorizontalContentAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Width="340" Margin="0,0,0,0" Foreground="CadetBlue"/>
+            <Button Content="Назад" HorizontalAlignment="Left" Click ="GoBack" Foreground="White"  VerticalAlignment="Top" Width="60" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="10,10,0,0"/>
+            <Label Content="Придумайте новый пароль, пароль должен соответствовать следующим требованиям:" Margin="0,0,0,270" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <Label Content="- Пароль должен быть длинной в 8 символов и более;" Margin="0,60,90,270" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <Label Content="- Пароль должен содержать буквы и цифры;" Margin="0,110,142,270" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <Label Content="Введите новый пароль:" Margin="0,0,252,100" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <TextBox x:Name="parolTB" HorizontalAlignment="Center" Margin="0,0,0,40" Width="400" Height="32" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
+            <Label Content="Подтвердите новый пароль:" Margin="0,20,232,0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <TextBox x:Name="confirm_parolTB" HorizontalAlignment="Center" Margin="0,80,0,0" Width="400" Height="32" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
+            <Button Content="Создать новый пароль" HorizontalAlignment="Center" Click ="CreateParol" Foreground="White"  VerticalAlignment="Center" Width="200" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="0,300,0,0"/>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,0 +1,25 @@
+﻿<Page x:Class="BPRapp.Pages.GetBackParol"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BPRapp.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="GetBackParol">
+
+    <Grid>
+        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
+            <Label Content="ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
+        </Grid>
+
+        <Grid Margin="0,45,0,0" Background="White">
+            <Label Content="Восстановление пароля" HorizontalContentAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Width="340" Margin="0,0,0,0" Foreground="CadetBlue"/>
+            <Button Content="Назад" HorizontalAlignment="Left" Click ="GoBack" Foreground="White"  VerticalAlignment="Top" Width="60" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="10,10,0,0"/>
+            <Label Content="Укажите адрес электронной почты к которой привязан ваш аккаунт:" Margin="0,0,7,160" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <TextBox x:Name="emailTB" HorizontalAlignment="Center" Margin="0,0,0,100" Width="400" Height="32" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
+            <Button Content="Отправить электронную почту" HorizontalAlignment="Center" Click ="SendEmail" Foreground="White"  VerticalAlignment="Center" Width="200" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0"/>
+        </Grid>
+    </Grid>
+</Page>
+

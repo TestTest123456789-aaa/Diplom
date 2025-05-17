@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPRapp", "BPRapp\BPRapp.csproj", "{04C87AB9-E7FA-4D73-939D-01317FD14EBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04C87AB9-E7FA-4D73-939D-01317FD14EBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04C87AB9-E7FA-4D73-939D-01317FD14EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04C87AB9-E7FA-4D73-939D-01317FD14EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04C87AB9-E7FA-4D73-939D-01317FD14EBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0F1BEEDF-596C-42C9-B086-8915C1DFBD9C}
+	EndGlobalSection
+EndGlobal
