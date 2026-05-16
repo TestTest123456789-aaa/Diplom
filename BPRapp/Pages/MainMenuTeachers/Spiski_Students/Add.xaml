@@ -64,9 +64,10 @@
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="3"
-                                Padding="{TemplateBinding Padding}">
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="0"
+                                          VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -80,6 +81,7 @@
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
@@ -89,7 +91,8 @@
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="{TemplateBinding BorderThickness}"
                                         IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ClickMode="Press">
+                                        ClickMode="Press"
+                                        Focusable="False">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
                                         <Border x:Name="border"
@@ -107,7 +110,8 @@
                                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                                                 Margin="{TemplateBinding Padding}"
                                                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                VerticalAlignment="Center"/>
+                                                                VerticalAlignment="Center"
+                                                                RecognizesAccessKey="True"/>
                                                 <Path Grid.Column="1"
                                                       x:Name="Arrow"
                                                       Data="M0,0 L4,4 L8,0 Z"
@@ -234,7 +238,7 @@
                                 <TextBlock Text="Пол студента:" Style="{StaticResource SectionLabel}"/>
                                 <ComboBox x:Name="polTB"
                                           Style="{StaticResource ModernComboBox}"
-                                          Margin="0,0,0,15">
+                                          Margin="0,0,0,15" Height="54">
                                     <ComboBoxItem Content="Мужской"/>
                                     <ComboBoxItem Content="Женский"/>
                                 </ComboBox>
@@ -249,12 +253,12 @@
                                           DisplayMemberPath="FIO"
                                           SelectedValuePath="Id"
                                           IsEditable="False"
-                                          IsTextSearchEnabled="True"/>
+                                          IsTextSearchEnabled="True" Height="53"/>
 
                                 <TextBlock Text="Отметка об отсутствии:" Style="{StaticResource SectionLabel}"/>
                                 <ComboBox x:Name="otmetka_ov_otsytstviiTB"
                                           Style="{StaticResource ModernComboBox}"
-                                          Margin="0,0,0,15">
+                                          Margin="0,0,0,15" Height="50">
                                     <ComboBoxItem Content="Присутствовал"/>
                                     <ComboBoxItem Content="Отсутствовал"/>
                                 </ComboBox>
