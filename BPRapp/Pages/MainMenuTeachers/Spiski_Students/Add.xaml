@@ -58,6 +58,9 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -67,7 +70,7 @@
                                 CornerRadius="3">
                             <ScrollViewer x:Name="PART_ContentHost"
                                           Margin="0"
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Stretch"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -80,6 +83,8 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="MinHeight" Value="32"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -92,7 +97,8 @@
                                         BorderThickness="{TemplateBinding BorderThickness}"
                                         IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                         ClickMode="Press"
-                                        Focusable="False">
+                                        Focusable="False"
+                                        HorizontalAlignment="Stretch">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
                                         <Border x:Name="border"
@@ -108,8 +114,9 @@
                                                 <ContentPresenter Grid.Column="0"
                                                                 Content="{TemplateBinding Content}"
                                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
                                                                 Margin="{TemplateBinding Padding}"
-                                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
                                                                 RecognizesAccessKey="True"/>
                                                 <Path Grid.Column="1"
@@ -160,6 +167,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEditable" Value="true">
+                    <Setter Property="IsTextSearchEnabled" Value="False"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="SectionLabel" TargetType="TextBlock">
@@ -206,7 +218,7 @@
 
         <!-- Основная форма -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="20">
-            <Border Background="White" CornerRadius="10" Padding="30">
+            <Border Background="White" CornerRadius="10" Padding="30" ShadowDepth="5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -238,7 +250,7 @@
                                 <TextBlock Text="Пол студента:" Style="{StaticResource SectionLabel}"/>
                                 <ComboBox x:Name="polTB"
                                           Style="{StaticResource ModernComboBox}"
-                                          Margin="0,0,0,15" Height="54">
+                                          Margin="0,0,0,15">
                                     <ComboBoxItem Content="Мужской"/>
                                     <ComboBoxItem Content="Женский"/>
                                 </ComboBox>
@@ -253,12 +265,12 @@
                                           DisplayMemberPath="FIO"
                                           SelectedValuePath="Id"
                                           IsEditable="False"
-                                          IsTextSearchEnabled="True" Height="53"/>
+                                          IsTextSearchEnabled="True"/>
 
                                 <TextBlock Text="Отметка об отсутствии:" Style="{StaticResource SectionLabel}"/>
                                 <ComboBox x:Name="otmetka_ov_otsytstviiTB"
                                           Style="{StaticResource ModernComboBox}"
-                                          Margin="0,0,0,15" Height="50">
+                                          Margin="0,0,0,15">
                                     <ComboBoxItem Content="Присутствовал"/>
                                     <ComboBoxItem Content="Отсутствовал"/>
                                 </ComboBox>
