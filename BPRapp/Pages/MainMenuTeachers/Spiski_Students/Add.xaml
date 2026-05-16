@@ -20,6 +20,11 @@
         <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
         <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
 
+        <!-- Шаблон для отображения группы -->
+        <DataTemplate x:Key="GroupItemTemplate">
+            <TextBlock Text="{Binding Name}" FontSize="13" VerticalAlignment="Center"/>
+        </DataTemplate>
+
         <!-- Стили для элементов управления -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
@@ -74,21 +79,80 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="3"
-                                    Padding="{TemplateBinding Padding}">
-                                <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"/>
-                            </Border>
-                            <ToggleButton HorizontalAlignment="Right"
-                                        Background="Transparent"
-                                        BorderThickness="0"/>
+                            <ToggleButton x:Name="toggleButton"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="border"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="3">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ContentPresenter Grid.Column="0"
+                                                                Content="{TemplateBinding Content}"
+                                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                Margin="{TemplateBinding Padding}"
+                                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                VerticalAlignment="Center"/>
+                                                <Path Grid.Column="1"
+                                                      x:Name="Arrow"
+                                                      Data="M0,0 L4,4 L8,0 Z"
+                                                      Fill="{StaticResource DarkBlueBrush}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Margin="0,0,10,0"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#F0F8FF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   PopupAnimation="Slide"
+                                   AllowsTransparency="True"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   MinWidth="{TemplateBinding ActualWidth}"
+                                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border x:Name="dropDownBorder"
+                                        Background="White"
+                                        BorderBrush="{StaticResource PrimaryBlueBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="3"
+                                        Margin="0,2,0,0">
+                                    <ScrollViewer x:Name="DropDownScrollViewer"
+                                                  MaxHeight="200"
+                                                  VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter x:Name="ItemsPresenter"
+                                                        KeyboardNavigation.DirectionalNavigation="Contained"
+                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="dropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -168,7 +232,9 @@
                                 <TextBox x:Name="nomer_paketaTB" Style="{StaticResource ModernTextBox}" Margin="0,0,0,15"/>
 
                                 <TextBlock Text="Пол студента:" Style="{StaticResource SectionLabel}"/>
-                                <ComboBox x:Name="polTB" Style="{StaticResource ModernComboBox}" Margin="0,0,0,15">
+                                <ComboBox x:Name="polTB"
+                                          Style="{StaticResource ModernComboBox}"
+                                          Margin="0,0,0,15">
                                     <ComboBoxItem Content="Мужской"/>
                                     <ComboBoxItem Content="Женский"/>
                                 </ComboBox>
@@ -182,11 +248,13 @@
                                           Margin="0,0,0,15"
                                           DisplayMemberPath="FIO"
                                           SelectedValuePath="Id"
-                                          IsEditable="True"
+                                          IsEditable="False"
                                           IsTextSearchEnabled="True"/>
 
                                 <TextBlock Text="Отметка об отсутствии:" Style="{StaticResource SectionLabel}"/>
-                                <ComboBox x:Name="otmetka_ov_otsytstviiTB" Style="{StaticResource ModernComboBox}" Margin="0,0,0,15">
+                                <ComboBox x:Name="otmetka_ov_otsytstviiTB"
+                                          Style="{StaticResource ModernComboBox}"
+                                          Margin="0,0,0,15">
                                     <ComboBoxItem Content="Присутствовал"/>
                                     <ComboBoxItem Content="Отсутствовал"/>
                                 </ComboBox>
@@ -209,13 +277,18 @@
                                 <TextBox x:Name="sredniy_ball_attestataTB" Style="{StaticResource ModernTextBox}" Margin="0,0,0,15"/>
 
                                 <TextBlock Text="Форма обучения:" Style="{StaticResource SectionLabel}"/>
-                                <ComboBox x:Name="forma_obychenyaTB" Style="{StaticResource ModernComboBox}" Margin="0,0,0,15">
+                                <ComboBox x:Name="forma_obychenyaTB"
+                                          Style="{StaticResource ModernComboBox}"
+                                          Margin="0,0,0,15">
                                     <ComboBoxItem Content="Очная"/>
                                     <ComboBoxItem Content="Заочная"/>
                                 </ComboBox>
 
                                 <TextBlock Text="Группа:" Style="{StaticResource SectionLabel}"/>
-                                <ComboBox x:Name="group_nameTB" Style="{StaticResource ModernComboBox}"/>
+                                <ComboBox x:Name="group_nameTB"
+                                          Style="{StaticResource ModernComboBox}"
+                                          DisplayMemberPath="Name"
+                                          SelectedValuePath="Id"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
