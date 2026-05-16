@@ -4,26 +4,118 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BPRapp.Pages"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Authorization">
+      mc:Ignorable="d"
+      Title="Authorization" MinHeight="500" MinWidth="800">
 
     <Grid>
-        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
-            <Label Content="ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
-        </Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#2E8B57" Offset="0.0"/>
+                <GradientStop Color="#20B2AA" Offset="0.5"/>
+                <GradientStop Color="#4682B4" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Grid Margin="0,45,0,0" Background="White">
-            <Label Content="Авторизация" HorizontalContentAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Width="340" Margin="0,0,0,0" Foreground="CadetBlue"/>
-            <Label Content="Логин:" Margin="0,0,350,280" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <TextBox x:Name="loginTB" HorizontalAlignment="Center" Margin="0,0,0,220" Width="400" Height="30" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
-            <Label Content="Пароль:" Margin="0,0,350,160" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <TextBox x:Name="parolTB" HorizontalAlignment="Center" Margin="0,0,0,100" Width="400" Height="32" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
-            <Button Content="Войти" HorizontalAlignment="Center" Click ="Authorize" Foreground="White"  VerticalAlignment="Center" Width="200" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0"/>
-            <Label Content="Забыли пароль от аккаунта? - " Margin="0,130,100,0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <Button Click="GetBackParol"  Content="Восстановить пароль" HorizontalAlignment="Center" Margin="185,130,0,0" Foreground="CadetBlue" VerticalAlignment="Center" Width="121" Height="31" Background="White" BorderBrush="White" BorderThickness="1"/>
-            <Label Content="Если у вас ещё нет аккаунта - зарегистрируйтесь" Margin="0,240,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <Button Click="OpenRegistration"  Content="Зарегистрироваться" HorizontalAlignment="Center" Margin="0,300,0,0" Foreground="White" VerticalAlignment="Center" Width="200" Height="31" Background="CadetBlue" BorderBrush="Black" BorderThickness="1"/>
-        </Grid>
+        <Canvas>
+            <Ellipse Width="300" Height="300" Fill="White" Opacity="0.1" Canvas.Left="50" Canvas.Top="100"/>
+            <Ellipse Width="200" Height="200" Fill="White" Opacity="0.1" Canvas.Right="100" Canvas.Bottom="150"/>
+        </Canvas>
+
+        <Border Background="White" 
+                CornerRadius="20" 
+                Width="450" 
+                Height="590"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="Black" Direction="315" ShadowDepth="10" Opacity="0.3"/>
+            </Border.Effect>
+
+            <Grid Margin="40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <Border Background="#2E8B57" Width="80" Height="80" CornerRadius="40" HorizontalAlignment="Center" Margin="0,0,0,15">
+                        <TextBlock Text="📋" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Система ВПР" FontSize="28" FontWeight="Bold" Foreground="#2E8B57" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Авторизация" FontSize="16" Foreground="Gray" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" VerticalAlignment="Center">
+
+                    <TextBlock Text="Логин" FontWeight="Bold" Foreground="#333" Margin="0,0,0,8" FontSize="13"/>
+                    <Border BorderBrush="#DDD" BorderThickness="1.5" CornerRadius="8" Background="#FAFAFA">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="👤" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox x:Name="loginTB" Grid.Column="1" BorderThickness="0" Background="Transparent" 
+                                     Height="45" FontSize="14" Padding="10,0" VerticalContentAlignment="Center"
+                                     Text="login123"/>
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Text="Пароль" FontWeight="Bold" Foreground="#333" Margin="0,20,0,8" FontSize="13"/>
+                    <Border BorderBrush="#DDD" BorderThickness="1.5" CornerRadius="8" Background="#FAFAFA">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="🔒" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox x:Name="parolTB" Grid.Column="1" BorderThickness="0" Background="Transparent" 
+                                     Height="45" FontSize="14" Padding="10,0" VerticalContentAlignment="Center"
+                                     Text="parol123"/>
+                        </Grid>
+                    </Border>
+
+                    <Button Content="Войти в систему" Click="Authorize" Height="50" Margin="0,30,0,0"
+                            Background="#2E8B57" Foreground="White" FontSize="16" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#2E8B57"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#257346"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--<Button Click="GetBackParol" Content="🔑 Забыли пароль?" Height="40" Margin="0,15,0,0"
+                            Background="Transparent" Foreground="#4682B4" FontSize="13" BorderThickness="0" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="#2E8B57"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>-->
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" HorizontalAlignment="Center">
+                    <TextBlock Text="© 2026 Система управления ВПР" Foreground="#999" FontSize="11" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

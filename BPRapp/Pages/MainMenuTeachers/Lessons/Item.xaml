@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="BPRapp.Pages.MainMenuTeachers.Lessons.Item"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Lessons"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="5">
+        <Border BorderBrush="CadetBlue" BorderThickness="1" Background="White" CornerRadius="20" VerticalAlignment="Top" Height="67">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="5" Opacity="0.5"/>
+            </Border.Effect>
+            <Grid Margin="10, 3, 10, 10">
+                <Button Content="Изменить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="25" BorderBrush="Green" Background="Green" Foreground="White" FontWeight="Bold" Click="EditLesson" Margin="0,26,0,0"/>
+                <Button Content="Удалить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="25" BorderBrush="#E41613" Background="#E41613" Foreground="White" FontWeight="Bold" Margin="80,26,0,0" Click="DeleteLesson"/>
+                <Grid Margin="165,0,0,0">
+                    <Label Content="Название учебного предмета:" Margin="0,0,10,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="lessonTB" IsEnabled="False" Margin="0,26,10,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10,0">
+                        <TextBox.Effect>
+                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
+                        </TextBox.Effect>
+                    </TextBox>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

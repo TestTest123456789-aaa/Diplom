@@ -1,0 +1,36 @@
+﻿<Page x:Class="BPRapp.Pages.MainMenuAdmins.MainMenuAdmin"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BPRapp.Pages.MainMenuAdmins"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainMenuAdmin">
+
+    <Grid>
+        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
+            <Label Content="Меню администратора" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
+        </Grid>
+        <Grid Margin="0,45,0,0" Background="White">
+            <Grid Width="3" Margin="200,0,0,0" Background="CadetBlue" HorizontalAlignment="Left"/>
+            <ScrollViewer Margin="0, 0, 0, 40" HorizontalAlignment="Left" Width="200" BorderBrush="White">
+                <StackPanel Background="White">
+                    <Button Content="🔐 Администраторы" HorizontalAlignment="Center" Click="OpenAdmins_List" 
+        Foreground="White" Width="170" Height="30" Background="CadetBlue" 
+        BorderBrush="Black" BorderThickness="1" Margin="5"/>
+                    <Button Content="👨‍🏫 Преподаватели" HorizontalAlignment="Center" Click="OpenTeachers_List" 
+        Foreground="White" Width="170" Height="30" Background="CadetBlue" 
+        BorderBrush="Black" BorderThickness="1" Margin="5"/>
+                    <Button Content="📤 Экспорт/Импорт" HorizontalAlignment="Center" Click="OpenExportImport" 
+        Foreground="White" Width="170" Height="30" Background="CadetBlue" 
+        BorderBrush="Black" BorderThickness="1" Margin="5"/>
+                </StackPanel>
+            </ScrollViewer>
+            <Button Content="🔙 Вернуться к авторизации" HorizontalAlignment="Left" 
+        Click="OpenAuthorization" Foreground="White" VerticalAlignment="Bottom" 
+        Width="190" Height="30" Background="CadetBlue" BorderBrush="Black" 
+        BorderThickness="1" Margin="5"/>
+        </Grid>
+    </Grid>
+</Page>

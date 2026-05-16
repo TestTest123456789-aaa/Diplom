@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="BPRapp.Pages.MainMenuTeachers.Specialties.SpecialtyItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Specialties"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="800">
+    <Grid Margin="5">
+        <Border BorderBrush="CadetBlue" BorderThickness="1" Background="White" 
+            CornerRadius="10" VerticalAlignment="Top" Height="50">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Код:" FontWeight="Bold" FontSize="10"/>
+                    <TextBlock x:Name="codeTB" Text="" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="10,0">
+                    <TextBlock Text="Название:" FontWeight="Bold" FontSize="10"/>
+                    <TextBlock x:Name="nameTB" Text="" FontSize="12" TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="✏️" Width="30" Height="25" Click="EditSpecialty" 
+                        Background="Green" Foreground="White" BorderBrush="Green" Margin="0,0,5,0"/>
+                    <Button Content="🗑️" Width="30" Height="25" Click="DeleteSpecialty" 
+                        Background="#E41613" Foreground="White" BorderBrush="#E41613"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

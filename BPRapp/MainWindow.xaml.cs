@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using BPRapp.Classes;
+using System.Windows;
 
 namespace BPRapp
 {

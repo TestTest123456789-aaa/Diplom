@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="BPRapp.Pages.MainMenuTeachers.Closed_BRP.Item"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Closed_BRP"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="10">
+        <Border BorderBrush="CadetBlue" BorderThickness="1.5" Background="White" 
+                CornerRadius="15" VerticalAlignment="Top" Height="160">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Color="Black" Direction="315" 
+                                  ShadowDepth="3" Opacity="0.3"/>
+            </Border.Effect>
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Основная информация -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                        <TextBlock Text="📅 Дата проведения:" FontWeight="Bold" 
+                                   Foreground="#2E8B57" FontSize="11"/>
+                        <TextBox x:Name="dateTB" IsEnabled="False" Height="26" 
+                                 TextWrapping="Wrap" Text="" 
+                                 VerticalContentAlignment="Center" 
+                                 Padding="8,0" Background="#F0F8FF"
+                                 BorderBrush="#B0C4DE" BorderThickness="1">
+                            <TextBox.Effect>
+                                <DropShadowEffect BlurRadius="5" Color="Black" 
+                                                Direction="315" ShadowDepth="1" Opacity="0.2"/>
+                            </TextBox.Effect>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="5">
+                        <TextBlock Text="⏰ Время проведения:" FontWeight="Bold" 
+                                   Foreground="#2E8B57" FontSize="11"/>
+                        <TextBox x:Name="timeTB" IsEnabled="False" Height="26" 
+                                 TextWrapping="Wrap" Text="" 
+                                 VerticalContentAlignment="Center" 
+                                 Padding="8,0" Background="#F0F8FF"
+                                 BorderBrush="#B0C4DE" BorderThickness="1">
+                            <TextBox.Effect>
+                                <DropShadowEffect BlurRadius="5" Color="Black" 
+                                                Direction="315" ShadowDepth="1" Opacity="0.2"/>
+                            </TextBox.Effect>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="5">
+                        <TextBlock Text="👥 Количество студентов:" FontWeight="Bold" 
+                                   Foreground="#2E8B57" FontSize="11"/>
+                        <TextBox x:Name="countTB" IsEnabled="False" Height="26" 
+                                 TextWrapping="Wrap" Text="" 
+                                 VerticalContentAlignment="Center" 
+                                 Padding="8,0" Background="#F0F8FF"
+                                 BorderBrush="#B0C4DE" BorderThickness="1">
+                            <TextBox.Effect>
+                                <DropShadowEffect BlurRadius="5" Color="Black" 
+                                                Direction="315" ShadowDepth="1" Opacity="0.2"/>
+                            </TextBox.Effect>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" Margin="5">
+                        <TextBlock Text="👨‍ Ответственный:" FontWeight="Bold" 
+                                   Foreground="#2E8B57" FontSize="11"/>
+                        <TextBox x:Name="responsible_userTB" IsEnabled="False" Height="26" 
+                                 TextWrapping="Wrap" Text="" 
+                                 VerticalContentAlignment="Center" 
+                                 Padding="8,0" Background="#F0F8FF"
+                                 BorderBrush="#B0C4DE" BorderThickness="1">
+                            <TextBox.Effect>
+                                <DropShadowEffect BlurRadius="5" Color="Black" 
+                                                Direction="315" ShadowDepth="1" Opacity="0.2"/>
+                            </TextBox.Effect>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="4" Margin="5,0,0,0">
+                        <TextBlock Text="📚 Предмет:" FontWeight="Bold" 
+                                   Foreground="#2E8B57" FontSize="11"/>
+                        <TextBox x:Name="lessonTB" IsEnabled="False" Height="26" 
+                                 TextWrapping="Wrap" Text="" 
+                                 VerticalContentAlignment="Center" 
+                                 Padding="8,0" Background="#F0F8FF"
+                                 BorderBrush="#B0C4DE" BorderThickness="1">
+                            <TextBox.Effect>
+                                <DropShadowEffect BlurRadius="5" Color="Black" 
+                                                Direction="315" ShadowDepth="1" Opacity="0.2"/>
+                            </TextBox.Effect>
+                        </TextBox>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Таймер обратного отсчёта -->
+                <Border Grid.Row="1" Margin="0,10,0,0" Padding="10,8" 
+                        Background="#E0F7FA" CornerRadius="8" 
+                        BorderBrush="#4DD0E1" BorderThickness="1">
+                    <Label x:Name="ClosedDate" Content="" 
+                           FontWeight="Bold" FontSize="13" 
+                           Foreground="CadetBlue" 
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

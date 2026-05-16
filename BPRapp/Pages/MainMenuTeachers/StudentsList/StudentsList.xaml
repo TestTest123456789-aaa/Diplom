@@ -1,0 +1,54 @@
+﻿<Page x:Class="BPRapp.Pages.MainMenuTeachers.StudentsList.StudentsList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.StudentsList"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+Title="Список студентов">
+    <Grid>
+        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
+            <Label Content="Список всех студентов" Foreground="White" 
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" 
+               FontSize="19" FontFamily="MV Boli"/>
+        </Grid>
+        <Grid Margin="0,45,0,0" Background="White">
+            <Grid Width="3" Margin="200,0,0,0" Background="CadetBlue" HorizontalAlignment="Left"/>
+
+            <ScrollViewer Margin="0, 0, 0, 40" HorizontalAlignment="Left" Width="200" BorderBrush="White">
+                <StackPanel Background="White">
+                    <Button Content="Списки ВПР" Click="OpenSpiski_BPR" 
+                        Foreground="White" Background="CadetBlue" BorderBrush="Black" 
+                        BorderThickness="1" Margin="5" Width="170"/>
+                    <Button Content="Расписание ВПР" Click="OpenRaspisanie_BPR" 
+                        Foreground="White" Background="CadetBlue" BorderBrush="Black" 
+                        BorderThickness="1" Margin="5" Width="170"/>
+                    <Button Content="Ближайшие ВПР" Click="OpenClosed_BRP" 
+                        Foreground="White" Background="CadetBlue" BorderBrush="Black" 
+                        BorderThickness="1" Margin="5" Width="170"/>
+                    <Button Content="Группы" Click="OpenGroups" 
+                        Foreground="White" Background="CadetBlue" BorderBrush="Black" 
+                        BorderThickness="1" Margin="5" Width="170"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <StackPanel Margin="210, 10, 10, 0" Orientation="Horizontal">
+                <ComboBox x:Name="filterGroupCB" Width="150" Margin="0,0,5,0" 
+                      DisplayMemberPath="Name" SelectedValuePath="Id"
+                      SelectionChanged="ApplyFilters"/>
+                <Button Content="Сбросить" Click="ResetFilters" Width="80" 
+                    Background="LightGray" Margin="5,0,0,0"/>
+            </StackPanel>
+
+            <ScrollViewer Margin="210, 45, 0, 40" BorderBrush="White">
+                <StackPanel x:Name="StudentsParent" Background="White"/>
+            </ScrollViewer>
+
+            <Button Content="Вернуться в меню" Click="OpenMainMenu" 
+                Foreground="White" Background="CadetBlue" BorderBrush="Black" 
+                BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                Width="190" Height="30" Margin="5"/>
+        </Grid>
+    </Grid>
+</Page>

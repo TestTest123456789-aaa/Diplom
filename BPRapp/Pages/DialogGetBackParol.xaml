@@ -10,16 +10,24 @@
 
     <Grid>
         <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
-            <Label Content="ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
+            <Label Content="ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" FontSize="19" FontFamily="MV Boli"/>
         </Grid>
-
         <Grid Margin="0,45,0,0" Background="White">
-            <Label Content="Восстановление пароля" HorizontalContentAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Width="340" Margin="0,0,0,0" Foreground="CadetBlue"/>
-            <Button Content="Назад" HorizontalAlignment="Left" Click ="GoBack" Foreground="White"  VerticalAlignment="Top" Width="60" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="10,10,0,0"/>
-            <Label Content="На вашу почту был отправлен код для восстановления вашего аккаунта" Margin="7,0,0,240" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <Label Content="Введите полученный код в поле:" Margin="0,0,210,160" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <TextBox x:Name="kod_vosstanovleniaTB" HorizontalAlignment="Center" Margin="0,0,0,100" Width="400" Height="32" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
-            <Button Content="Отправить код восстановления" HorizontalAlignment="Center" Click ="SendKode" Foreground="White"  VerticalAlignment="Center" Width="200" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0"/>
+            <Label Content="Восстановление пароля" HorizontalContentAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Width="340" Foreground="CadetBlue" Margin="0,0,0,0"/>
+            <Button Content="Назад" HorizontalAlignment="Left" Click="GoBack" Foreground="White" VerticalAlignment="Top" Width="60" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="10,10,0,0"/>
+
+            <Label Content="На вашу почту был отправлен 6-значный код" Margin="7,0,0,240" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+            <Label Content="Введите полученный код:" Margin="0,0,230,160" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
+
+            <!-- ⚠️ ВАЖНО: x:Name должен быть точно таким -->
+            <TextBox x:Name="kod_vosstanovleniaTB" 
+                     HorizontalAlignment="Center" Margin="0,0,0,100" Width="400" Height="32" 
+                     Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center" 
+                     MaxLength="6" TextAlignment="Center" FontSize="16"/>
+
+            <Button Content="Подтвердить код" HorizontalAlignment="Center" Click="SendKode" 
+                    Foreground="White" VerticalAlignment="Center" Width="200" Height="30" 
+                    Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0"/>
         </Grid>
     </Grid>
 </Page>

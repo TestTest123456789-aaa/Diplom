@@ -1,0 +1,24 @@
+﻿<Page x:Class="BPRapp.Pages.MainMenuTeachers.Spiski_Students.Spiski_Students"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Spiski_Students"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Spiski_Students">
+
+    <Grid>
+        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
+            <Label Content="Список" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
+        </Grid>
+        <Grid Margin="0,45,0,0" Background="White">
+            <Grid Height="3" Margin="0,0,0,37" Background="CadetBlue" VerticalAlignment="Bottom"/>
+            <ScrollViewer Margin="0, 40, 0, 40" BorderBrush="White">
+                <StackPanel x:Name="Spiski_StudentParent" Background="White"/>
+            </ScrollViewer>
+            <Button Content="Добавить" HorizontalAlignment="Right" Click="AddSpisok_BPR" Foreground="White"  VerticalAlignment="Bottom" Width="100" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="5"/>
+            <Button Content="Вернуться в меню" HorizontalAlignment="Left" Click="OpenSpiski_BPR" Foreground="White"  VerticalAlignment="Bottom" Width="130" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="5"/>
+        </Grid>
+    </Grid>
+</Page>

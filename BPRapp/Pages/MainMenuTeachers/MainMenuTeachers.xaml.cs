@@ -1,0 +1,52 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+
+namespace BPRapp.Pages.MainMenuTeachers
+{
+    public partial class MainMenuTeachers : Page
+    {
+        public MainMenuTeachers()
+        {
+            InitializeComponent();
+            Loaded += Spiski_BPR_Loaded;
+        }
+
+        private void Spiski_BPR_Loaded(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] Auth: {Classes.CurrentUser.IsAuthenticated}, FIO: '{Classes.CurrentUser.FIO}', UserId: {Classes.CurrentUser.UserId}");
+
+            if (FioLbl != null)
+            {
+                if (Classes.CurrentUser.IsAuthenticated && !string.IsNullOrEmpty(Classes.CurrentUser.FIO))
+                {
+                    FioLbl.Text = Classes.CurrentUser.FIO;
+
+                    string contactInfo = "";
+                    if (!string.IsNullOrEmpty(Classes.CurrentUser.Email)) contactInfo += Classes.CurrentUser.Email;
+                    if (!string.IsNullOrEmpty(Classes.CurrentUser.Phone))
+                    {
+                        if (!string.IsNullOrEmpty(contactInfo)) contactInfo += " | ";
+                        contactInfo += Classes.CurrentUser.Phone;
+                    }
+
+                    ContactLbl.Text = string.IsNullOrEmpty(contactInfo) ? "Контакты не указаны" : contactInfo;
+                }
+                else
+                {
+                    FioLbl.Text = "Пользователь не авторизован";
+                    ContactLbl.Text = "";
+                }
+            }
+        }
+
+        private void OpenSpiski_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Spiski_BPR.Spiski_BPR());
+        private void OpenRaspisanie_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Raspisanie_BPR.Raspisanie_BPR());
+        private void OpenClosed_BRP(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Closed_BRP.Closed_BRP());
+        private void OpenGroups(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Groups.Groups());
+        private void OpenDepartments(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Departments.Departments());
+        private void OpenAuthorization(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.Authorization());
+        private void OpenExport(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Export.Export());
+        private void OpenLessons(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Lessons());
+        private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
+    }
+}
