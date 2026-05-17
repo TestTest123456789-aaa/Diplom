@@ -13,7 +13,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
             InitializeComponent();
             _groupId = groupId;
             var group = Classes.Groups.Select().FirstOrDefault(g => g.Id == groupId);
-            TitleLbl.Content = $"Студенты группы {group?.Name ?? ""}";
+            TitleLbl.Text = $"Студенты группы {group?.Name ?? ""}";
             LoadStudents();
         }
 
@@ -22,7 +22,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
             ListParent.Children.Clear();
             var students = Classes.Student_Info.Select().Where(s => s.Group_name == _groupId && s.Spisok_BPR_Id == null).OrderBy(s => s.FIO).ToList();
 
-            CountLbl.Content = $"Всего студентов: {students.Count}";
+            CountLbl.Text = $"Всего студентов: {students.Count}";
 
             int index = 1;
             foreach (var s in students)
@@ -107,5 +107,16 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
         {
             MainWindow.init.frame.Navigate(new Groups());
         }
+
+        // 🔹 ДОБАВЛЕННЫЕ МЕТОДЫ НАВИГАЦИИ (для бокового меню)
+        private void OpenAuthorization(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.Authorization());
+        private void OpenSpiski_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Spiski_BPR.Spiski_BPR());
+        private void OpenRaspisanie_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Raspisanie_BPR.Raspisanie_BPR());
+        private void OpenClosed_BRP(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Closed_BRP.Closed_BRP());
+        private void OpenExport(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Export.Export());
+        private void OpenLessons(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Lessons());
+        private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
+        private void OpenGroups(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Groups());
+        private void OpenDepartments(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Departments.Departments());
     }
 }

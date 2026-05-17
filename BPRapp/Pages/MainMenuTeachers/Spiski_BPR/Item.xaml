@@ -5,18 +5,52 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Spiski_BPR"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10">
-        <Border BorderBrush="CadetBlue" BorderThickness="1" Background="White" CornerRadius="20" VerticalAlignment="Top" Height="165">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="5" Opacity="0.5"/>
-            </Border.Effect>
-            <Grid Margin="15">
-                <Button Content="Открыть список" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="25" Background="CadetBlue" Foreground="White" FontWeight="Bold" Click="OpenSpisok" Margin="0,24,0,0"/>
-                <Button Content="Изменить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" BorderBrush="Green" Background="Green" Foreground="White" FontWeight="Bold" Click="EditSpisok_BPR" Margin="0,68,0,0"/>
-                <Button Content="Удалить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="25" BorderBrush="#E41613" Background="#E41613" Foreground="White" FontWeight="Bold" Margin="0,110,0,0" Click="DeleteSpisok_BPR"/>
-
-                <Grid Margin="133,0,0,0">
+            d:DesignHeight="200" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <Color x:Key="PrimaryBlue">#5B9BD5</Color>
+        <Color x:Key="DarkBlue">#2E5C8A</Color>
+        <Color x:Key="LightBlue">#E8F4FC</Color>
+        <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
+        <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Color="#333333" Opacity="0.15" Direction="315"/>
+    </UserControl.Resources>
+    <Grid Margin="5">
+        <Border Background="White" CornerRadius="12" Padding="15" BorderBrush="#C5D5E5" BorderThickness="1" Effect="{StaticResource CardShadow}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <Button Content="📂 Открыть список" Click="OpenSpisok" Width="120" Height="30" Margin="0,0,0,8" Background="{StaticResource PrimaryBlueBrush}" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="✏️ Изменить" Click="EditSpisok_BPR" Width="120" Height="30" Margin="0,0,0,8" Background="#4CAF50" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="🗑️ Удалить" Click="DeleteSpisok_BPR" Width="120" Height="30" Background="#F44336" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+                <Grid Grid.Column="1" Margin="10,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -28,43 +62,43 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Column="0" Grid.Row="0">
-                        <Label Content="Дата:" FontWeight="Bold"/>
-                        <TextBox x:Name="dateTB" IsEnabled="False" Height="25" Padding="5,0"/>
+                    <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,10,5">
+                        <TextBlock Text="Дата:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="dateTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Grid.Row="0">
-                        <Label Content="Время:" FontWeight="Bold"/>
-                        <TextBox x:Name="timeTB" IsEnabled="False" Height="25" Padding="5,0"/>
+                    <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,0,10,5">
+                        <TextBlock Text="Время:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="timeTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="0">
-                        <Label Content="Кабинет:" FontWeight="Bold"/>
-                        <TextBox x:Name="roomTB" IsEnabled="False" Height="25" Padding="5,0"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="0" Grid.Row="1">
-                        <Label Content="Ответственный:" FontWeight="Bold"/>
-                        <TextBox x:Name="respTB" IsEnabled="False" Height="25" Padding="5,0"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Grid.Row="1">
-                        <Label Content="Предмет:" FontWeight="Bold"/>
-                        <TextBox x:Name="lessonTB" IsEnabled="False" Height="25" Padding="5,0"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="1">
-                        <Label Content="Группа:" FontWeight="Bold"/>
-                        <TextBox x:Name="groupTB" IsEnabled="False" Height="25" Padding="5,0"/>
+                    <StackPanel Grid.Column="2" Grid.Row="0" Margin="0,0,0,5">
+                        <TextBlock Text="Кабинет:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="roomTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="0" Grid.Row="2">
-                        <Label Content="Руков. группы:" FontWeight="Bold"/>
-                        <TextBox x:Name="headTB" IsEnabled="False" Height="25" Padding="5,0"/>
+                    <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,5,10,5">
+                        <TextBlock Text="Ответственный:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="respTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Grid.Row="2">
-                        <Label Content="Специальность:" FontWeight="Bold"/>
-                        <TextBox x:Name="specTB" IsEnabled="False" Height="25" Padding="5,0"/>
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,5,10,5">
+                        <TextBlock Text="Предмет:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="lessonTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="2">
-                        <Label Content="Студентов:" FontWeight="Bold"/>
-                        <TextBox x:Name="countTB" IsEnabled="False" Height="25" Padding="5,0"/>
+                    <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,5,0,5">
+                        <TextBlock Text="Группа:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="groupTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,5,10,0">
+                        <TextBlock Text="Рук. группы:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="headTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,5,10,0">
+                        <TextBlock Text="Специальность:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="specTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="2" Margin="0,5,0,0">
+                        <TextBlock Text="Студентов:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="countTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
                 </Grid>
             </Grid>

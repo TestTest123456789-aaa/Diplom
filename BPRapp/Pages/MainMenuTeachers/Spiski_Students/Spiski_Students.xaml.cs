@@ -54,9 +54,11 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_Students
 
                         if (existingCopy == null)
                         {
-                            new Student_Info(
-                                0, "", s.Pol, "", s.FIO, "", "", "", "", s.Forma_obychenya, bpr.GroupId.Value, currentBprId
-                            ).Add();
+                            var newStudent = new Student_Info(0, "", s.Pol, "", s.FIO, "", "", "", "", s.Forma_obychenya, bpr.GroupId.Value, currentBprId);
+                            if (!newStudent.Add(out string errorMessage))
+                            {
+                                System.Diagnostics.Debug.WriteLine($"⚠️ Не скопирован студент {s.FIO}: {errorMessage}");
+                            }
                         }
                     }
 
@@ -78,7 +80,16 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_Students
         }
 
         private void AddSpisok_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Add(null, currentBprId));
-
         private void OpenSpiski_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Spiski_BPR.Spiski_BPR());
+
+        // 🔹 ДОБАВЛЕННЫЕ МЕТОДЫ НАВИГАЦИИ (для бокового меню)
+        private void OpenAuthorization(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.Authorization());
+        private void OpenRaspisanie_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Raspisanie_BPR.Raspisanie_BPR());
+        private void OpenClosed_BRP(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Closed_BRP.Closed_BRP());
+        private void OpenExport(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Export.Export());
+        private void OpenLessons(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Lessons());
+        private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
+        private void OpenGroups(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Groups.Groups());
+        private void OpenDepartments(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Departments.Departments());
     }
 }

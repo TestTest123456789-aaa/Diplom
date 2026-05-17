@@ -416,7 +416,14 @@ namespace BPRapp.Pages.MainMenuTeachers.Export
                             if (!string.IsNullOrWhiteSpace(fio))
                             {
                                 var exists = Student_Info.Select().FirstOrDefault(s => s.FIO == fio && s.Group_name == gid);
-                                if (exists == null) { new Student_Info(0, "", pol, kod, fio, "", "", "", "", forma, gid, null).Add(); added++; }
+                                if (exists == null)
+                                {
+                                    var newStudent = new Student_Info(0, "", pol, kod, fio, "", "", "", "", forma, gid, null);
+                                    if (newStudent.Add(out string errorMessage))
+                                        added++;
+                                    else
+                                        System.Diagnostics.Debug.WriteLine($"⚠️ Не добавлен: {errorMessage}");
+                                }
                                 else skipped++;
                             }
                             row++;

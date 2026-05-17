@@ -28,7 +28,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Specialties
                 var dept = Classes.Departments.Select().FirstOrDefault(d => d.Id == departmentId.Value);
                 if (dept != null)
                 {
-                    deptNameLabel.Content = $"📂 Отделение: {dept.Name}";
+                    deptNameLabel.Text = $"📂 Отделение: {dept.Name}";
                     _allSpecialties = Classes.Specialties.SelectByDepartment(departmentId.Value);
                     LoadSpecialties();
                 }

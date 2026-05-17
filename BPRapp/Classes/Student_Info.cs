@@ -108,8 +108,10 @@ namespace BPRapp.Classes
             return students;
         }
 
-        public void Add()
+        public bool Add(out string errorMessage)
         {
+            errorMessage = "";
+
             if (Spisok_BPR_Id.HasValue)
             {
                 var existing = Select().FirstOrDefault(s =>
@@ -118,21 +120,32 @@ namespace BPRapp.Classes
 
                 if (existing != null)
                 {
-                    throw new Exception($"Студент \"{this.FIO}\" уже добавлен в этот список ВПР");
+                    errorMessage = $"Студент \"{this.FIO}\" уже добавлен в этот список ВПР";
+                    return false;
                 }
             }
 
-            string SQL = $"INSERT INTO `student_info` " +
-                         $"(`Nomer_paketa`, `Pol`, `Kod`, `FIO`, `Otmetka_ov_otsytstvii`, `Sredniy_ball_attestata`, " +
-                         $"`Otsenka_po_russkomy_yaziky`, `Otsenka_po_matematike`, `Forma_obychenya`, `Group_name`, `Spisok_BPR_Id`) " +
-                         $"VALUES " +
-                         $"('{Nomer_paketa}', '{Pol}', '{Kod}', '{FIO}', '{Otmetka_ov_otsytstvii}', '{Sredniy_ball_attestata}', " +
-                         $"'{Otsenka_po_russkomy_yaziky}', '{Otsenka_po_matematike}', '{Forma_obychenya}', '{Group_name}', " +
-                         $"{(Spisok_BPR_Id.HasValue ? Spisok_BPR_Id.Value.ToString() : "NULL")});";
+            try
+            {
+                string SQL = $"INSERT INTO `student_info` " +
+                             $"(`Nomer_paketa`, `Pol`, `Kod`, `FIO`, `Otmetka_ov_otsytstvii`, `Sredniy_ball_attestata`, " +
+                             $"`Otsenka_po_russkomy_yaziky`, `Otsenka_po_matematike`, `Forma_obychenya`, `Group_name`, `Spisok_BPR_Id`) " +
+                             $"VALUES " +
+                             $"('{Nomer_paketa}', '{Pol}', '{Kod}', '{FIO}', '{Otmetka_ov_otsytstvii}', '{Sredniy_ball_attestata}', " +
+                             $"'{Otsenka_po_russkomy_yaziky}', '{Otsenka_po_matematike}', '{Forma_obychenya}', '{Group_name}', " +
+                             $"{(Spisok_BPR_Id.HasValue ? Spisok_BPR_Id.Value.ToString() : "NULL")});";
 
-            MySqlConnection connection = OpenConnection();
-            Query(SQL, connection);
-            CloseConnection(connection);
+                MySqlConnection connection = OpenConnection();
+                Query(SQL, connection);
+                CloseConnection(connection);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Ошибка при добавлении: {ex.Message}";
+                return false;
+            }
         }
         public void Update()
         {
@@ -172,6 +185,21 @@ namespace BPRapp.Classes
             object result = command.ExecuteScalar();
             CloseConnection(connection);
             return result != null ? Convert.ToInt32(result) : 0;
+        }
+
+        // 🔁 ПЕРЕГРУЗКА ДЛЯ ОБРАТНОЙ СОВМЕСТИМОСТИ
+        // Позволяет старому коду работать без изменений
+        public void Add()
+        {
+            if (Add(out string errorMessage))
+            {
+                // Успех — ничего не делаем
+            }
+            else
+            {
+                // Если ошибка — выбрасываем исключение как раньше
+                throw new System.Exception(errorMessage);
+            }
         }
     }
 }

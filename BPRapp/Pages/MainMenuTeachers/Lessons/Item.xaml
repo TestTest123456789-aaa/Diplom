@@ -5,23 +5,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Lessons"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+              d:DesignHeight="80" d:DesignWidth="900">
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Color="#333333" Opacity="0.15" Direction="315"/>
+    </UserControl.Resources>
     <Grid Margin="5">
-        <Border BorderBrush="CadetBlue" BorderThickness="1" Background="White" CornerRadius="20" VerticalAlignment="Top" Height="67">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="5" Opacity="0.5"/>
-            </Border.Effect>
-            <Grid Margin="10, 3, 10, 10">
-                <Button Content="Изменить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="25" BorderBrush="Green" Background="Green" Foreground="White" FontWeight="Bold" Click="EditLesson" Margin="0,26,0,0"/>
-                <Button Content="Удалить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="25" BorderBrush="#E41613" Background="#E41613" Foreground="White" FontWeight="Bold" Margin="80,26,0,0" Click="DeleteLesson"/>
-                <Grid Margin="165,0,0,0">
-                    <Label Content="Название учебного предмета:" Margin="0,0,10,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="lessonTB" IsEnabled="False" Margin="0,26,10,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10,0">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                </Grid>
+        <Border Background="White" CornerRadius="12" Padding="15" BorderBrush="#C5D5E5" BorderThickness="1" Effect="{StaticResource CardShadow}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <Button Content="✏️" Click="EditLesson" Width="34" Height="28" Margin="0,0,5,0" Background="#4CAF50" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="🗑️" Click="DeleteLesson" Width="34" Height="28" Background="#F44336" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="Название учебного предмета:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                    <TextBox x:Name="lessonTB" IsEnabled="False" Height="26" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1" Padding="8,0"/>
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

@@ -5,21 +5,42 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Spiski_Students"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Border BorderBrush="CadetBlue" BorderThickness="1" Background="White" VerticalAlignment="Top" Height="60">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="5" Opacity="0.5"/>
-            </Border.Effect>
+             d:DesignHeight="70" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <Color x:Key="PrimaryBlue">#5B9BD5</Color>
+        <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Color="#333333" Opacity="0.15" Direction="315"/>
+    </UserControl.Resources>
+    <Grid Margin="5">
+        <Border Background="White" CornerRadius="10" Padding="10" BorderBrush="#C5D5E5" BorderThickness="1" Effect="{StaticResource CardShadow}">
             <Grid>
-                <Button Click ="EditStudent" VerticalAlignment="Top" Width="25" Height="25" Background="White" BorderBrush="CadetBlue" BorderThickness="2" Margin="5,26,0,0" HorizontalAlignment="Left">
-                    <Image Source="/Images/pencil.png"/>
-                </Button>
-                <Button Click ="DeleteStudent" VerticalAlignment="Top" Width="25" Height="25" Background="White" BorderBrush="Red" BorderThickness="2" Margin="40,26,0,0" HorizontalAlignment="Left">
-                    <Image Source="/Images/Delete.png"/>
-                </Button>
-
-                <Grid Margin="70,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <Button Click="EditStudent" Width="30" Height="28" Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}" BorderThickness="1.5" Margin="0,0,4,0" ToolTip="Редактировать">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Source="/Images/pencil.png" Width="16" Height="16"/>
+                    </Button>
+                    <Button Click="DeleteStudent" Width="30" Height="28" Background="White" BorderBrush="#F44336" BorderThickness="1.5" ToolTip="Удалить">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Source="/Images/Delete.png" Width="16" Height="16"/>
+                    </Button>
+                </StackPanel>
+                <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35*"/>
                         <ColumnDefinition Width="25*"/>
@@ -32,66 +53,46 @@
                         <ColumnDefinition Width="35*"/>
                         <ColumnDefinition Width="30*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="№Пакета" Margin="0,0,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="nomer_paketaTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10,0">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Пол" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-                    <TextBox x:Name="polTB" IsEnabled="False" Margin="0,26,0,0" Height="25" Grid.Column="1" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Код" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="2"/>
-                    <TextBox x:Name="kodTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="2">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="ФИО" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="3"/>
-                    <TextBox x:Name="FIOTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="3">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Отметка об отсутсвии" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="4"/>
-                    <TextBox x:Name="otmetka_ov_otsytstviiTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="4">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Средний балл аттестата" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="5"/>
-                    <TextBox x:Name="sredniy_ball_attestataTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="5">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Оценка по русскому языку" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="6"/>
-                    <TextBox x:Name="otsenka_po_russkomy_yazikyTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="6">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Оценка по математике" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="7"/>
-                    <TextBox x:Name="otsenka_po_matematikeTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="7">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Форма обучения" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="8"/>
-                    <TextBox x:Name="forma_obychenyaTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="8">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Группа" Margin="0,0,0,0" VerticalAlignment="Top" Grid.Column="9"/>
-                    <TextBox x:Name="group_nameTB" IsEnabled="False" Margin="0,26,0,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="9">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="№Пакета" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="nomer_paketaTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Пол" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="polTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Код" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="kodTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="3">
+                        <TextBlock Text="ФИО" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="FIOTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4">
+                        <TextBlock Text="Отметка" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="otmetka_ov_otsytstviiTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="5">
+                        <TextBlock Text="Ср. балл" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="sredniy_ball_attestataTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="6">
+                        <TextBlock Text="Рус. язык" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="otsenka_po_russkomy_yazikyTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="7">
+                        <TextBlock Text="Матем." FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="otsenka_po_matematikeTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="8">
+                        <TextBlock Text="Форма" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="forma_obychenyaTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="9">
+                        <TextBlock Text="Группа" FontWeight="SemiBold" FontSize="10" Foreground="#666"/>
+                        <TextBox x:Name="group_nameTB" IsEnabled="False" Height="24" Padding="6,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>

@@ -38,8 +38,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
 
             if (_student == null)
             {
-                
-                new Student_Info(
+                var newStudent = new Student_Info(
                     0,
                     "",
                     pol,
@@ -52,8 +51,19 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
                     forma,
                     _groupId,
                     null
-                ).Add();
-                MessageBox.Show("Студент добавлен в группу");
+                );
+
+                if (newStudent.Add(out string errorMessage))
+                {
+                    MessageBox.Show("Студент добавлен в группу", "Успех",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(errorMessage, "Ошибка",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace BPRapp.Pages.MainMenuTeachers.Specialties
@@ -31,28 +32,32 @@ namespace BPRapp.Pages.MainMenuTeachers.Specialties
                 return;
             }
 
-            if (this.specialty == null)
+            try
             {
-                Classes.Specialties newSpec = new Classes.Specialties(
-                    0, codeTB.Text, nameTB.Text, departmentId);
-                newSpec.Add();
-                MessageBox.Show("Специальность добавлена");
-            }
-            else
-            {
-                Classes.Specialties updatedSpec = new Classes.Specialties(
-                    specialty.Id, codeTB.Text, nameTB.Text, specialty.DepartmentId);
-                updatedSpec.Update();
-                MessageBox.Show("Информация изменена");
-            }
+                if (this.specialty == null)
+                {
+                    Classes.Specialties newSpec = new Classes.Specialties(
+                        0, codeTB.Text.Trim(), nameTB.Text.Trim(), departmentId);
+                    newSpec.Add();
+                    MessageBox.Show("✅ Специальность добавлена", "Успех",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    Classes.Specialties updatedSpec = new Classes.Specialties(
+                        specialty.Id, codeTB.Text.Trim(), nameTB.Text.Trim(), specialty.DepartmentId);
+                    updatedSpec.Update();
+                    MessageBox.Show("✅ Информация изменена", "Успех",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
 
-            if (departmentId.HasValue)
-            {
-                MainWindow.init.frame.Navigate(new Specialties(departmentId.Value));
+                // Возврат на предыдущую страницу
+                GoBack(null, null);
             }
-            else
+            catch (Exception ex)
             {
-                MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Departments.Departments());
+                MessageBox.Show(ex.Message, "Ошибка валидации",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

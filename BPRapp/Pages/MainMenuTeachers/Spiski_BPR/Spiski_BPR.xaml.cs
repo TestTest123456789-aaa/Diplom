@@ -1,6 +1,7 @@
 ﻿using BPRapp.Classes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,8 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
     public partial class Spiski_BPR : Page
     {
         private List<BPR_info> AllBPR = new List<BPR_info>();
+        private List<Classes.Groups> AllGroups = new List<Classes.Groups>();
+        private List<Classes.Lessons> AllLessons = new List<Classes.Lessons>();
         private bool _showMyOnly = false;
 
         public Spiski_BPR()
@@ -20,13 +23,11 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
 
         private void Spiski_BPR_Loaded(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"[DEBUG] Auth: {Classes.CurrentUser.IsAuthenticated}, FIO: '{Classes.CurrentUser.FIO}', UserId: {Classes.CurrentUser.UserId}");
             if (FioLbl != null)
             {
                 if (Classes.CurrentUser.IsAuthenticated && !string.IsNullOrEmpty(Classes.CurrentUser.FIO))
                 {
                     FioLbl.Text = Classes.CurrentUser.FIO;
-
                     string contactInfo = "";
                     if (!string.IsNullOrEmpty(Classes.CurrentUser.Email)) contactInfo += Classes.CurrentUser.Email;
                     if (!string.IsNullOrEmpty(Classes.CurrentUser.Phone))
@@ -34,7 +35,6 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
                         if (!string.IsNullOrEmpty(contactInfo)) contactInfo += " | ";
                         contactInfo += Classes.CurrentUser.Phone;
                     }
-
                     ContactLbl.Text = string.IsNullOrEmpty(contactInfo) ? "Контакты не указаны" : contactInfo;
                 }
                 else
@@ -50,28 +50,46 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
         private void LoadData()
         {
             AllBPR = BPR_info.Select();
-            var groups = Classes.Groups.Select();
+
+            // Загрузка групп
+            AllGroups = Classes.Groups.Select();
             groupFilterCB.Items.Clear();
-            groupFilterCB.Items.Add(new Classes.Groups(0, "Все группы"));
-            foreach (var g in groups) groupFilterCB.Items.Add(g);
+            groupFilterCB.Items.Add(new Classes.Groups(0, "Все группы", null, null, null));
+            foreach (var g in AllGroups) groupFilterCB.Items.Add(g);
             groupFilterCB.SelectedIndex = 0;
-            var lessons = Classes.Lessons.Select();
+
+            // Загрузка предметов
+            AllLessons = Classes.Lessons.Select();
             lessonFilterCB.Items.Clear();
             lessonFilterCB.Items.Add(new Classes.Lessons(0, "Все предметы"));
-            foreach (var l in lessons) lessonFilterCB.Items.Add(l);
+            foreach (var l in AllLessons) lessonFilterCB.Items.Add(l);
             lessonFilterCB.SelectedIndex = 0;
         }
 
         private void ApplyFilters()
         {
             var filtered = AllBPR.AsEnumerable();
+
+            // 🔹 Фильтр по дате
+            if (dateFilterDP.SelectedDate.HasValue)
+            {
+                string selectedDate = dateFilterDP.SelectedDate.Value.ToString("dd.MM.yyyy");
+                filtered = filtered.Where(b => b.Date == selectedDate);
+            }
+
+            // 🔹 Фильтр по группе
             if (groupFilterCB.SelectedValue is int groupId && groupId > 0)
                 filtered = filtered.Where(b => b.GroupId == groupId);
+
+            // 🔹 Фильтр по предмету
             if (lessonFilterCB.SelectedValue is int lessonId && lessonId > 0)
                 filtered = filtered.Where(b => b.Lesson == lessonId);
+
+            // 🔹 Фильтр "Мои ВПР"
             if (_showMyOnly && Classes.CurrentUser.IsAuthenticated)
                 filtered = filtered.Where(b => b.Responsible_user == Classes.CurrentUser.UserId);
 
+            // 🔹 Сортировка по дате и времени
             var sorted = filtered
                 .OrderBy(b =>
                 {
@@ -80,6 +98,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
                     return dt;
                 })
                 .ToList();
+
             Spiski_BPRParent.Children.Clear();
             foreach (var bpr in sorted)
                 Spiski_BPRParent.Children.Add(new Item(bpr));
@@ -92,8 +111,17 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
             ApplyFilters();
         }
 
-        private void FilterChanged(object sender, SelectionChangedEventArgs e) => ApplyFilters();
+        private void FilterChanged(object sender, RoutedEventArgs e) => ApplyFilters();
 
+        private void ResetFilters(object sender, RoutedEventArgs e)
+        {
+            dateFilterDP.SelectedDate = null;
+            groupFilterCB.SelectedIndex = 0;
+            lessonFilterCB.SelectedIndex = 0;
+            ApplyFilters();
+        }
+
+        // 🔹 Навигация
         private void OpenSpiski_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Spiski_BPR());
         private void OpenRaspisanie_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Raspisanie_BPR.Raspisanie_BPR());
         private void OpenClosed_BRP(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Closed_BRP.Closed_BRP());

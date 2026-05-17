@@ -80,6 +80,24 @@ namespace BPRapp.Classes
 
         public void Add()
         {
+            if (string.IsNullOrWhiteSpace(Code) || string.IsNullOrWhiteSpace(Name))
+            {
+                throw new Exception("Код и название специальности не могут быть пустыми");
+            }
+
+            // 🔹 ПРОВЕРКА УНИКАЛЬНОСТИ КОДА
+            var existingSpecs = Classes.Specialties.Select();
+            if (existingSpecs.Any(s => s.Code.ToLower() == this.Code.ToLower()))
+            {
+                throw new Exception($"Специальность с кодом \"{this.Code}\" уже существует");
+            }
+
+            // 🔹 ПРОВЕРКА УНИКАЛЬНОСТИ НАЗВАНИЯ
+            if (existingSpecs.Any(s => s.Name.ToLower() == this.Name.ToLower() && s.Id != Id))
+            {
+                throw new Exception($"Специальность с названием \"{this.Name}\" уже существует");
+            }
+
             string SQL = "INSERT INTO `specialties`(`Code`, `Name`, `DepartmentId`) VALUES (@Code, @Name, @DepartmentId)";
             MySqlConnection connection = OpenConnection();
             var cmd = new MySqlCommand(SQL, connection);
@@ -117,7 +135,6 @@ namespace BPRapp.Classes
         public void Delete()
         {
             MySqlConnection conn = OpenConnection();
-            conn.Open();
 
             string checkSQL = "SELECT COUNT(*) FROM `groups` WHERE SpecialtyId = @Id";
             var checkCmd = new MySqlCommand(checkSQL, conn);

@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace BPRapp.Pages.MainMenuTeachers.Kabinets
 {
@@ -53,5 +54,10 @@ namespace BPRapp.Pages.MainMenuTeachers.Kabinets
             }
         }
         private void GoBack(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Kabinets());
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !int.TryParse(e.Text, out _);
+        }
     }
 }

@@ -1,67 +1,277 @@
 ﻿<Page x:Class="BPRapp.Pages.MainMenuTeachers.Spiski_BPR.Spiski_BPR"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Spiski_BPR"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="Spiski_BPR">
+      mc:Ignorable="d"
+      d:DesignHeight="750" d:DesignWidth="1200"
+      Title="Списки ВПР">
 
+    <Page.Resources>
+        <!-- 🎨 Корпоративные цвета -->
+        <Color x:Key="PrimaryBlue">#5B9BD5</Color>
+        <Color x:Key="DarkBlue">#2E5C8A</Color>
+        <Color x:Key="LightBlue">#E8F4FC</Color>
+        <Color x:Key="White">#FFFFFF</Color>
+        <Color x:Key="AccentBlue">#4A86C7</Color>
+
+        <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
+        <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
+        <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
+        <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
+        <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlue}"/>
+
+        <!-- ✨ Тень для карточек -->
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" 
+                          Color="#333333" Opacity="0.15" Direction="315"/>
+
+        <!-- 🔘 Стиль кнопки -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource AccentBlueBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 🔘 Стиль кнопки меню -->
+        <Style x:Key="MenuButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}"
+                                BorderThickness="1" BorderBrush="{StaticResource LightBlueBrush}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 🔽 Стиль ComboBox -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#C5D5E5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <ContentPresenter Content="{TemplateBinding Text}" Margin="6,0" VerticalAlignment="Center"/>
+                            </Border>
+                            <ToggleButton Grid.Column="1" Focusable="false"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press" HorizontalAlignment="Right" Width="24"
+                                        Background="Transparent" BorderThickness="0">
+                                <Path Data="M0,0 L4,4 L8,0 Z" Fill="{StaticResource DarkBlueBrush}"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Width="6" Height="4"/>
+                            </ToggleButton>
+                            <Popup x:Name="PART_Popup" AllowsTransparency="true"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" PopupAnimation="Slide">
+                                <Border Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}"
+                                        BorderThickness="1" CornerRadius="5" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
+                                    <ScrollViewer>
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <!-- 🎨 Градиентный фон -->
     <Grid>
-        <StackPanel x:Name="UserInfoPanel" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Panel.ZIndex="100">
-            <TextBlock x:Name="FioLbl" Text="" FontWeight="Bold" Foreground="White" FontSize="14"/>
-            <TextBlock x:Name="ContactLbl" Text="" Foreground="#C8D8E4" FontSize="11" Margin="0,0,0,0" FontStyle="Italic"/>
-        </StackPanel>
-        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
-            <Label Content="Списки ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" FontSize="19" FontFamily="MV Boli"/>
-        </Grid>        
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="{StaticResource LightBlue}" Offset="0"/>
+                <GradientStop Color="White" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Grid Margin="0,45,0,0" Background="White">
-            <Grid Width="3" Margin="200,0,0,0" Background="CadetBlue" HorizontalAlignment="Left"/>
-            <Grid Height="3" Margin="200,0,0,37" Background="CadetBlue" VerticalAlignment="Bottom"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <ScrollViewer Margin="0, 0, 0, 40" HorizontalAlignment="Left" Width="200" BorderBrush="White">
-                <StackPanel Background="White">
-                    <Button Content="📋 Списки ВПР" Click="OpenSpiski_BPR" 
-Foreground="White" Width="170" Height="30" 
-Background="#2E8B57" Margin="5" FontWeight="Bold"/>
-                    <Button Content="📅 Расписание ВПР" Click="OpenRaspisanie_BPR" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
-                    <Button Content="🔒 Ближайшие ВПР" Click="OpenClosed_BRP" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
-                    <Button Content="📤 Экспорт/Импорт" Click="OpenExport" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
-                    <Button Content="📚 Учебные предметы" Click="OpenLessons" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
-                    <Button Content="🚪 Кабинеты" Click="OpenKabinets" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
-                    <Button Content="👥 Группы" Click="OpenGroups" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
-                    <Button Content="🏢 Отделения" Click="OpenDepartments" 
-Foreground="White" Width="170" Height="30" 
-Background="CadetBlue" Margin="5"/>
+        <!-- 🔷 Заголовок -->
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBlueBrush}" Padding="25,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Background="White" CornerRadius="24" Width="48" Height="48" 
+                        HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
+                    <TextBlock Text="📋" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Списки ВПР" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова"
+                               FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
                 </StackPanel>
-            </ScrollViewer>
+                <StackPanel x:Name="UserInfoPanel" Grid.Column="1" 
+                            Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <TextBlock x:Name="FioLbl" Text="" FontWeight="Bold" Foreground="White" FontSize="14"/>
+                    <TextBlock x:Name="ContactLbl" Text="" Foreground="#E6F2FF" FontSize="11" FontStyle="Italic"/>
+                </StackPanel>
+            </Grid>
+        </Border>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10,10,10,0">
-                <ComboBox x:Name="groupFilterCB" Width="150" Margin="0,0,5,0" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="FilterChanged"/>
-                <ComboBox x:Name="lessonFilterCB" Width="150" Margin="0,0,5,0" DisplayMemberPath="Lesson" SelectedValuePath="Id" SelectionChanged="FilterChanged"/>
-                <Button x:Name="myBPRBtn" Content="Мои ВПР" Width="100" Background="CadetBlue" Foreground="White" Click="ToggleMyBPR"/>
-            </StackPanel>
+        <!-- 📋 Основное содержимое -->
+        <Grid Grid.Row="1" Margin="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <ScrollViewer Margin="203, 40, 0, 40" BorderBrush="White">
-                <StackPanel x:Name="Spiski_BPRParent" Background="White"/>
-            </ScrollViewer>
+            <!-- Левая панель: Меню -->
+            <Border Grid.Column="0" Background="White" CornerRadius="12" 
+                    Padding="15" Effect="{StaticResource CardShadow}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="📌 Разделы" FontSize="16" FontWeight="Bold" 
+                                   Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
+                        <Button Content="📋 Списки ВПР" Click="OpenSpiski_BPR" Style="{StaticResource MenuButton}"
+                                Background="{StaticResource LightBlueBrush}" BorderBrush="{StaticResource PrimaryBlueBrush}"/>
+                        <Button Content="📅 Расписание ВПР" Click="OpenRaspisanie_BPR" Style="{StaticResource MenuButton}"/>
+                        <Button Content="🔒 Ближайшие ВПР" Click="OpenClosed_BRP" Style="{StaticResource MenuButton}"/>
+                        <Button Content="📤 Экспорт/Импорт" Click="OpenExport" Style="{StaticResource MenuButton}"/>
+                        <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
+                        <TextBlock Text="📚 Справочники" FontSize="16" FontWeight="Bold" 
+                                   Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
+                        <Button Content="📚 Учебные предметы" Click="OpenLessons" Style="{StaticResource MenuButton}"/>
+                        <Button Content="🚪 Кабинеты" Click="OpenKabinets" Style="{StaticResource MenuButton}"/>
+                        <Button Content="👥 Группы" Click="OpenGroups" Style="{StaticResource MenuButton}"/>
+                        <Button Content="🏢 Отделения" Click="OpenDepartments" Style="{StaticResource MenuButton}"/>
+                        <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
+                        <!-- 🔹 Кнопка ВЫХОД -->
+                        <Button Content="🚪 Выйти из системы" Click="OpenAuthorization" 
+                                Width="190" Height="45" Margin="5,5,5,15">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MenuButton}">
+                                    <Setter Property="Background" Value="#FFE5E5"/>
+                                    <Setter Property="Foreground" Value="#D32F2F"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FFCDD2"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
 
-            <Button Content="Добавить" HorizontalAlignment="Right" Click="AddSpisok_BPR" Foreground="White" VerticalAlignment="Bottom" Width="100" Height="30" Background="CadetBlue" Margin="5"/>
-            <Button Content="Вернуться к авторизации" HorizontalAlignment="Left" Click="OpenAuthorization" Foreground="White" VerticalAlignment="Bottom" Width="190" Height="30" Background="CadetBlue" Margin="5"/>
+            <!-- Правая панель: Фильтры и список -->
+            <Border Grid.Column="1" Background="White" CornerRadius="12" 
+                    Padding="20" Margin="20,0,0,0" Effect="{StaticResource CardShadow}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 🔹 Фильтры: Дата + Группы + Предметы -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                        <DatePicker x:Name="dateFilterDP" Width="180" Margin="0,0,10,0" 
+                                    Style="{StaticResource {x:Type DatePicker}}"
+                                    SelectedDateChanged="FilterChanged"
+                                    BorderBrush="#C5D5E5" BorderThickness="1"
+                                    Height="32" VerticalContentAlignment="Center"/>
+                        <ComboBox x:Name="groupFilterCB" Width="180" Margin="0,0,10,0" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  DisplayMemberPath="Name" SelectedValuePath="Id"
+                                  SelectionChanged="FilterChanged"/>
+                        <ComboBox x:Name="lessonFilterCB" Width="180" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  DisplayMemberPath="Lesson" SelectedValuePath="Id"
+                                  SelectionChanged="FilterChanged"/>
+                    </StackPanel>
+
+                    <!-- 🔹 Кнопка "Мои ВПР" + Сброс фильтров -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
+                        <Button Content="🔄 Сбросить фильтры" Click="ResetFilters" Width="150" Height="40" 
+                                Background="#6C757D" Foreground="White" Cursor="Hand" Margin="0,0,10,0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <Button x:Name="myBPRBtn" Content="Мои ВПР" Width="120" Height="40"
+                                Click="ToggleMyBPR" Style="{StaticResource ModernButton}"/>
+                    </StackPanel>
+
+                    <!-- Список ВПР -->
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
+                        <StackPanel x:Name="Spiski_BPRParent" Background="Transparent"/>
+                    </ScrollViewer>
+
+                    <!-- Кнопка Добавить -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="➕ Добавить" Click="AddSpisok_BPR" Width="140" Height="35"
+                                Background="{StaticResource PrimaryBlueBrush}" Foreground="White" Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Page>
