@@ -27,16 +27,25 @@ namespace BPRapp.Classes
         {
             try
             {
+                // Проверка настроек
                 if (string.IsNullOrEmpty(SenderEmail))
                 {
                     System.Diagnostics.Debug.WriteLine("❌ Ошибка: SenderEmail не задан в App.config");
                     return false;
                 }
-                if (string.IsNullOrEmpty(SenderPassword))
+                if (string.IsNullOrEmpty(SenderPassword) || SenderPassword == "xxxx xxxx xxxx xxxx" || SenderPassword.Length < 10)
                 {
-                    System.Diagnostics.Debug.WriteLine("❌ Ошибка: SenderPassword не задан в App.config");
+                    System.Diagnostics.Debug.WriteLine("❌ Ошибка: SenderPassword не задан или недействителен в App.config");
+                    System.Diagnostics.Debug.WriteLine($"   Текущее значение: '{SenderPassword}'");
+                    System.Diagnostics.Debug.WriteLine("   Для Gmail создайте App Password: https://myaccount.google.com/security");
                     return false;
                 }
+
+                System.Diagnostics.Debug.WriteLine($"📧 Попытка отправки письма...");
+                System.Diagnostics.Debug.WriteLine($"   SMTP Server: {SmtpServer}:{SmtpPort}");
+                System.Diagnostics.Debug.WriteLine($"   SSL: {EnableSsl}");
+                System.Diagnostics.Debug.WriteLine($"   From: {SenderEmail}");
+                System.Diagnostics.Debug.WriteLine($"   To: {recipientEmail}");
 
                 var client = new SmtpClient(SmtpServer, SmtpPort)
                 {
@@ -68,6 +77,29 @@ namespace BPRapp.Classes
                 System.Diagnostics.Debug.WriteLine($"   StatusCode: {smtpEx.StatusCode}");
                 System.Diagnostics.Debug.WriteLine($"   Server: {SmtpServer}:{SmtpPort}");
                 System.Diagnostics.Debug.WriteLine($"   From: {SenderEmail}");
+
+                if (smtpEx.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"   Inner Exception: {smtpEx.InnerException.Message}");
+                    if (smtpEx.InnerException.InnerException != null)
+                        System.Diagnostics.Debug.WriteLine($"   Inner-Inner: {smtpEx.InnerException.InnerException.Message}");
+                }
+
+                // Подсказки для частых ошибок
+                if (smtpEx.StatusCode == SmtpStatusCode.AuthenticationFailed)
+                {
+                    System.Diagnostics.Debug.WriteLine("\n💡 ПОДСКАЗКА: Неверный пароль. Для Gmail используйте App Password, а не обычный пароль.");
+                    System.Diagnostics.Debug.WriteLine("   Как создать: https://support.google.com/accounts/answer/185833");
+                }
+                else if (smtpEx.Message.Contains("535") || smtpEx.Message.Contains("Authentication"))
+                {
+                    System.Diagnostics.Debug.WriteLine("\n💡 ПОДСКАЗКА: Требуется App Password для Gmail.");
+                    System.Diagnostics.Debug.WriteLine("   1. Включите 2FA в аккаунте Google");
+                    System.Diagnostics.Debug.WriteLine("   2. Перейдите: https://myaccount.google.com/security");
+                    System.Diagnostics.Debug.WriteLine("   3. Создайте App Password для 'Mail' и 'Windows Computer'");
+                    System.Diagnostics.Debug.WriteLine("   4. Вставьте 16-значный код без пробелов в App.config");
+                }
+
                 return false;
             }
             catch (Exception ex)
@@ -75,7 +107,11 @@ namespace BPRapp.Classes
                 System.Diagnostics.Debug.WriteLine($"❌ Общая ошибка: {ex.GetType().Name}");
                 System.Diagnostics.Debug.WriteLine($"   Message: {ex.Message}");
                 if (ex.InnerException != null)
+                {
                     System.Diagnostics.Debug.WriteLine($"   Inner: {ex.InnerException.Message}");
+                    if (ex.InnerException.InnerException != null)
+                        System.Diagnostics.Debug.WriteLine($"   Inner-Inner: {ex.InnerException.InnerException.Message}");
+                }
                 return false;
             }
         }

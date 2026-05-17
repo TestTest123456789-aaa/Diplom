@@ -57,6 +57,7 @@ namespace BPRapp.Pages
                     break;
             }
         }
+
         private void GoToRecovery(object sender, RoutedEventArgs e)
         {
             MainWindow.init.frame.Navigate(new Pages.GetBackParol());
