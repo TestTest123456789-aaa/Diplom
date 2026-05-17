@@ -15,18 +15,14 @@
         <Color x:Key="LightBlue">#E8F4FC</Color>
         <Color x:Key="White">#FFFFFF</Color>
         <Color x:Key="AccentBlue">#4A86C7</Color>
-
         <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
         <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
         <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
         <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
         <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlue}"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Color="#333333" Opacity="0.15" Direction="315"/>
 
-        <!-- ✨ Тень для карточек -->
-        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" 
-                          Color="#333333" Opacity="0.15" Direction="315"/>
-
-        <!-- 🔘 Стиль кнопки -->
+        <!-- 🔘 Стили кнопок и контролов (без изменений) -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
             <Setter Property="Foreground" Value="White"/>
@@ -38,9 +34,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}"
-                                CornerRadius="8" Padding="{TemplateBinding Padding}"
-                                BorderThickness="1" BorderBrush="Transparent">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}" BorderThickness="1" BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -56,8 +50,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- 📝 Стиль TextBox -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#C5D5E5"/>
@@ -68,13 +60,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
-                            <ScrollViewer x:Name="PART_ContentHost" 
-                                        Margin="4,0" 
-                                        VerticalAlignment="Center"/>
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="4,0" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
@@ -86,8 +73,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- 🔽 Стиль ComboBox -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#C5D5E5"/>
@@ -95,64 +80,86 @@
             <Setter Property="Padding" Value="6,4"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="StaysOpenOnEdit" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5">
-                                <ContentPresenter Content="{TemplateBinding Text}" 
-                                                Margin="6,0"
-                                                VerticalAlignment="Center"/>
+                            <Border x:Name="border" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
+                                <Grid>
+                                    <!-- TextBox для редактируемого режима -->
+                                    <TextBox x:Name="PART_EditableTextBox"
+                                     Visibility="Collapsed"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Padding="6,0"
+                                     VerticalContentAlignment="Center"
+                                     Margin="0,0,24,0"/>
+                                    <!-- ContentPresenter для не редактируемого режима -->
+                                    <ContentPresenter x:Name="contentPresenter"
+                                              Content="{TemplateBinding Text}"
+                                              Margin="6,0"
+                                              VerticalAlignment="Center"/>
+                                </Grid>
                             </Border>
                             <ToggleButton Grid.Column="1" 
-                                        Focusable="false" 
-                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ClickMode="Press" 
-                                        HorizontalAlignment="Right" 
-                                        Width="24" 
-                                        Background="Transparent"
-                                        BorderThickness="0">
+                                  Focusable="false"
+                                  IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  ClickMode="Press" 
+                                  HorizontalAlignment="Right" 
+                                  Width="24" 
+                                  Background="Transparent"
+                                  BorderThickness="0">
                                 <Path Data="M0,0 L4,4 L8,0 Z" 
-                                      Fill="{StaticResource DarkBlueBrush}" 
-                                      HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center" 
-                                      Width="6" 
-                                      Height="4"/>
+                              Fill="{StaticResource DarkBlueBrush}"
+                              HorizontalAlignment="Center" 
+                              VerticalAlignment="Center" 
+                              Width="6" 
+                              Height="4"/>
                             </ToggleButton>
                             <Popup x:Name="PART_Popup" 
-                                   AllowsTransparency="true" 
-                                   IsOpen="{TemplateBinding IsDropDownOpen}" 
-                                   Placement="Bottom" 
-                                   PopupAnimation="Slide">
+                           AllowsTransparency="true"
+                           IsOpen="{TemplateBinding IsDropDownOpen}" 
+                           Placement="Bottom" 
+                           PopupAnimation="Slide">
                                 <Border Background="White" 
-                                        BorderBrush="{StaticResource PrimaryBlueBrush}" 
-                                        BorderThickness="1" 
-                                        CornerRadius="5" 
-                                        MinWidth="{TemplateBinding ActualWidth}"
-                                        MaxHeight="200">
+                                BorderBrush="{StaticResource PrimaryBlueBrush}"
+                                BorderThickness="1" 
+                                CornerRadius="5" 
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="200">
                                     <ScrollViewer>
                                         <ItemsPresenter/>
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <!-- Триггер для редактируемого режима -->
+                            <Trigger Property="IsEditable" Value="True">
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="contentPresenter" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                                <Setter TargetName="border" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- 🏷️ Стиль заголовка секции -->
         <Style x:Key="SectionLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
             <Setter Property="Margin" Value="0,0,0,6"/>
         </Style>
-
-        <!-- 📦 Стиль карточки секции -->
         <Style x:Key="SectionCard" TargetType="Border">
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="12"/>
@@ -163,7 +170,6 @@
         </Style>
     </Page.Resources>
 
-    <!-- 🎨 Градиентный фон страницы -->
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -171,41 +177,31 @@
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- 🔷 Заголовок страницы -->
+        <!-- 🔷 Заголовок -->
         <Border Grid.Row="0" Background="{StaticResource PrimaryBlueBrush}" Padding="25,20">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <!-- Иконка -->
-                <Border Background="White" CornerRadius="24" Width="48" Height="48" 
-                        HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
+                <Border Background="White" CornerRadius="24" Width="48" Height="48" HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
                     <TextBlock Text="👤" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-
-                <!-- Текст заголовка -->
                 <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                    <TextBlock Text="Добавление студента в список ВПР"
-                               FontSize="20" FontWeight="Bold" Foreground="White"
-                               FontFamily="Segoe UI Semibold"/>
-                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова"
-                               FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
+                    <TextBlock Text="Добавление студента в список ВПР" FontSize="20" FontWeight="Bold" Foreground="White" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова" FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
 
         <!-- 📋 Основная форма -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" 
-                     HorizontalScrollBarVisibility="Disabled" Margin="25">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="25">
             <Border Style="{StaticResource SectionCard}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -214,22 +210,15 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- 🔹 Левая колонка: Основная информация -->
+                    <!-- 🔹 Левая колонка -->
                     <StackPanel Grid.Column="0">
-                        <Border Background="{StaticResource LightBlueBrush}" CornerRadius="10" 
-                                Padding="18" Margin="0,0,0,20">
+                        <Border Background="{StaticResource LightBlueBrush}" CornerRadius="10" Padding="18" Margin="0,0,0,20">
                             <StackPanel>
-                                <TextBlock Text="📌 Основная информация" 
-                                           Style="{StaticResource SectionLabel}" 
-                                           FontSize="15" Margin="0,0,0,15"
-                                           Foreground="{StaticResource DarkBlueBrush}"/>
-
+                                <TextBlock Text="📌 Основная информация" Style="{StaticResource SectionLabel}" FontSize="15" Margin="0,0,0,15" Foreground="{StaticResource DarkBlueBrush}"/>
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Номер пакета" Style="{StaticResource SectionLabel}"/>
-                                    <TextBox x:Name="nomer_paketaTB" Style="{StaticResource ModernTextBox}" 
-                                             ToolTip="Введите номер варианта КИМ"/>
+                                    <TextBox x:Name="nomer_paketaTB" Style="{StaticResource ModernTextBox}" ToolTip="Введите номер варианта КИМ"/>
                                 </StackPanel>
-
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Пол студента" Style="{StaticResource SectionLabel}"/>
                                     <ComboBox x:Name="polTB" Style="{StaticResource ModernComboBox}">
@@ -237,21 +226,20 @@
                                         <ComboBoxItem Content="Женский"/>
                                     </ComboBox>
                                 </StackPanel>
-
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Код студента" Style="{StaticResource SectionLabel}"/>
-                                    <TextBox x:Name="kodTB" Style="{StaticResource ModernTextBox}" 
-                                             ToolTip="Уникальный идентификатор студента"/>
+                                    <TextBox x:Name="kodTB" Style="{StaticResource ModernTextBox}" ToolTip="Уникальный идентификатор студента"/>
                                 </StackPanel>
-
+                                <!-- ✅ ИСПРАВЛЕНО: Поиск по ФИО -->
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Выберите студента" Style="{StaticResource SectionLabel}"/>
                                     <ComboBox x:Name="studentCB" Style="{StaticResource ModernComboBox}"
                                               DisplayMemberPath="FIO" SelectedValuePath="Id"
-                                              IsEditable="True" IsTextSearchEnabled="True"
+                                              IsEditable="True" IsTextSearchEnabled="True" 
+                                              TextSearch.TextPath="FIO"
+                                              StaysOpenOnEdit="True"
                                               ToolTip="Начните вводить ФИО для поиска"/>
                                 </StackPanel>
-
                                 <StackPanel>
                                     <TextBlock Text="Отметка об отсутствии" Style="{StaticResource SectionLabel}"/>
                                     <ComboBox x:Name="otmetka_ov_otsytstviiTB" Style="{StaticResource ModernComboBox}">
@@ -263,34 +251,23 @@
                         </Border>
                     </StackPanel>
 
-                    <!-- 🔹 Правая колонка: Академические данные -->
+                    <!-- 🔹 Правая колонка -->
                     <StackPanel Grid.Column="2">
-                        <Border Background="{StaticResource LightBlueBrush}" CornerRadius="10" 
-                                Padding="18" Margin="0,0,0,20">
+                        <Border Background="{StaticResource LightBlueBrush}" CornerRadius="10" Padding="18" Margin="0,0,0,20">
                             <StackPanel>
-                                <TextBlock Text="📚 Академические данные" 
-                                           Style="{StaticResource SectionLabel}" 
-                                           FontSize="15" Margin="0,0,0,15"
-                                           Foreground="{StaticResource DarkBlueBrush}"/>
-
+                                <TextBlock Text="📚 Академические данные" Style="{StaticResource SectionLabel}" FontSize="15" Margin="0,0,0,15" Foreground="{StaticResource DarkBlueBrush}"/>
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Оценка по русскому языку" Style="{StaticResource SectionLabel}"/>
-                                    <TextBox x:Name="otsenka_po_russkomy_yazikyTB" Style="{StaticResource ModernTextBox}" 
-                                             ToolTip="Оценка от 2 до 5"/>
+                                    <TextBox x:Name="otsenka_po_russkomy_yazikyTB" Style="{StaticResource ModernTextBox}" ToolTip="Оценка от 2 до 5"/>
                                 </StackPanel>
-
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Оценка по математике" Style="{StaticResource SectionLabel}"/>
-                                    <TextBox x:Name="otsenka_po_matematikeTB" Style="{StaticResource ModernTextBox}" 
-                                             ToolTip="Оценка от 2 до 5"/>
+                                    <TextBox x:Name="otsenka_po_matematikeTB" Style="{StaticResource ModernTextBox}" ToolTip="Оценка от 2 до 5"/>
                                 </StackPanel>
-
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Средний балл аттестата" Style="{StaticResource SectionLabel}"/>
-                                    <TextBox x:Name="sredniy_ball_attestataTB" Style="{StaticResource ModernTextBox}" 
-                                             ToolTip="Например: 4.5"/>
+                                    <TextBox x:Name="sredniy_ball_attestataTB" Style="{StaticResource ModernTextBox}" ToolTip="Например: 4.5"/>
                                 </StackPanel>
-
                                 <StackPanel Margin="0,0,0,18">
                                     <TextBlock Text="Форма обучения" Style="{StaticResource SectionLabel}"/>
                                     <ComboBox x:Name="forma_obychenyaTB" Style="{StaticResource ModernComboBox}">
@@ -298,21 +275,21 @@
                                         <ComboBoxItem Content="Заочная"/>
                                     </ComboBox>
                                 </StackPanel>
-
+                                <!-- ✅ ИСПРАВЛЕНО: Поиск по названию группы -->
                                 <StackPanel>
                                     <TextBlock Text="Группа" Style="{StaticResource SectionLabel}"/>
                                     <ComboBox x:Name="group_nameTB" Style="{StaticResource ModernComboBox}"
-                                              DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                                              DisplayMemberPath="Name" SelectedValuePath="Id"
+                                              IsEditable="True" IsTextSearchEnabled="True"
+                                              TextSearch.TextPath="Name"
+                                              ToolTip="Начните вводить название группы"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
-
-                        <!-- 💡 Подсказка -->
                         <Border Background="#FFF9E6" CornerRadius="8" Padding="12" BorderBrush="#FFD700" BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="💡" FontSize="16" Margin="0,0,8,0"/>
-                                <TextBlock Text="Поля с оценками можно оставить пустыми и заполнить позже" 
-                                           FontSize="12" Foreground="#666" TextWrapping="Wrap"/>
+                                <TextBlock Text="Поля с оценками можно оставить пустыми и заполнить позже" FontSize="12" Foreground="#666" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -320,18 +297,15 @@
             </Border>
         </ScrollViewer>
 
-        <!-- 🔷 Нижняя панель с кнопками -->
-        <Border Grid.Row="2" Background="White" Padding="25,20" 
-                BorderBrush="{StaticResource LightBlueBrush}" BorderThickness="0,1,0,0">
+        <!-- 🔷 Кнопки -->
+        <Border Grid.Row="2" Background="White" Padding="25,20" BorderBrush="{StaticResource LightBlueBrush}" BorderThickness="0,1,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <Button Content="← Назад" Click="GoBackSpisok_Students"
-                        Width="130" HorizontalAlignment="Left">
+                <Button Content="← Назад" Click="GoBackSpisok_Students" Width="130" HorizontalAlignment="Left">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ModernButton}">
                             <Setter Property="Background" Value="#6C757D"/>
@@ -343,10 +317,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-
-                <!-- 🔹 Кнопка СБРОСИТЬ -->
-                <Button Content="🔄 Сбросить" Click="ResetForm"
-                        Width="130" Grid.Column="1" HorizontalAlignment="Center">
+                <Button Content="🔄 Сбросить" Click="ResetForm" Width="130" Grid.Column="1" HorizontalAlignment="Center">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource ModernButton}">
                             <Setter Property="Background" Value="#FFC107"/>
@@ -359,10 +330,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-
-                <Button x:Name="BthAdd" Click="AddStudent_info"
-                        Content="✅ Добавить запись" Style="{StaticResource ModernButton}" 
-                        Width="180" Grid.Column="2" HorizontalAlignment="Right"/>
+                <Button x:Name="BthAdd" Click="AddStudent_info" Content="✅ Добавить запись" Style="{StaticResource ModernButton}" Width="180" Grid.Column="2" HorizontalAlignment="Right"/>
             </Grid>
         </Border>
     </Grid>

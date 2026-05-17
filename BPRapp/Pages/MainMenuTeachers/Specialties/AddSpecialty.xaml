@@ -14,15 +14,12 @@
         <Color x:Key="DarkBlue">#2E5C8A</Color>
         <Color x:Key="LightBlue">#E8F4FC</Color>
         <Color x:Key="White">#FFFFFF</Color>
-
         <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
         <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
         <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
-
         <!-- ✨ Тень для карточек -->
         <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" 
                           Color="#333333" Opacity="0.15" Direction="315"/>
-
         <!-- 🔘 Стиль кнопки -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
@@ -48,7 +45,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- 📝 Стиль TextBox -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Background" Value="White"/>
@@ -76,7 +72,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- 🏷️ Стиль заголовка поля -->
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13"/>
@@ -94,7 +89,6 @@
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -108,12 +102,10 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
                 <Border Background="White" CornerRadius="24" Width="48" Height="48" 
                         HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
                     <TextBlock Text="🎓" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-
                 <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
                     <TextBlock Text="Специальность" FontSize="20" FontWeight="Bold" Foreground="White"/>
                     <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова"
@@ -134,7 +126,6 @@
                         <TextBlock x:Name="codeErrorTB" Text="" Foreground="Red" 
                                    FontSize="11" Margin="0,4,0,0" Visibility="Collapsed"/>
                     </StackPanel>
-
                     <!-- 🔹 Название специальности -->
                     <StackPanel Margin="0,0,0,25">
                         <TextBlock Text="Название специальности *" Style="{StaticResource FieldLabel}"/>
@@ -144,7 +135,6 @@
                         <TextBlock x:Name="nameErrorTB" Text="" Foreground="Red" 
                                    FontSize="11" Margin="0,4,0,0" Visibility="Collapsed"/>
                     </StackPanel>
-
                     <!-- 💡 Подсказка -->
                     <Border Background="#FFF9E6" CornerRadius="8" Padding="12" 
                             BorderBrush="#FFD700" BorderThickness="1" Margin="0,0,0,20">
@@ -167,7 +157,6 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
                 <Button Content="← Назад" Click="GoBack" Width="130" Height="35" 
                         Background="#6C757D" Foreground="White" Cursor="Hand">
                     <Button.Template>
@@ -178,7 +167,6 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-
                 <Button x:Name="BthAdd" Click="SaveSpecialty"
                         Content="💾 Сохранить" Style="{StaticResource ModernButton}" 
                         Width="180" Grid.Column="2"/>

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace BPRapp.Pages.MainMenuTeachers.Specialties
@@ -17,7 +18,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Specialties
 
         private void EditSpecialty(object sender, RoutedEventArgs e)
         {
-            MainWindow.init.frame.Navigate(new AddSpecialty(specialty));
+            MainWindow.init.frame.Navigate(new AddSpecialty(specialty, specialty.DepartmentId));
         }
 
         private void DeleteSpecialty(object sender, RoutedEventArgs e)
@@ -25,9 +26,21 @@ namespace BPRapp.Pages.MainMenuTeachers.Specialties
             if (MessageBox.Show("Удалить специальность?", "Подтверждение",
                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                specialty.Delete();
-                int? deptId = specialty.DepartmentId;
-                MainWindow.init.frame.Navigate(new Specialties(deptId ?? 0));
+                try
+                {
+                    specialty.Delete();
+                    int? deptId = specialty.DepartmentId;
+                    MainWindow.init.frame.Navigate(new Specialties(deptId ?? 0));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"⚠️ {ex.Message}\n\n" +
+                        $"Удалите эту запись из всех связанных таблиц, затем повторите попытку.",
+                        "Удаление невозможно",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,25 +44,58 @@ namespace BPRapp.Pages.MainMenuTeachers.Departments
 
         private void AddDepartment(object sender, RoutedEventArgs e)
         {
+            // 🔹 Валидация: название не пустое
+            if (string.IsNullOrWhiteSpace(nameTB.Text))
+            {
+                MessageBox.Show("Введите название отделения", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                nameTB.Focus();
+                return;
+            }
+
+            // 🔹 Валидация: проверка уникальности названия на уровне UI (доп. защита)
+            var existingDepts = Classes.Departments.Select();
+            bool nameExists = existingDepts.Any(d =>
+                d.Name.ToLower() == nameTB.Text.Trim().ToLower() &&
+                (department == null || d.Id != department.Id));
+
+            if (nameExists)
+            {
+                MessageBox.Show($"Отделение с названием \"{nameTB.Text.Trim()}\" уже существует",
+                    "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                nameTB.Focus();
+                return;
+            }
+
             int? headTeacherId = null;
             if (headTeacherCB.SelectedValue is int selectedId && selectedId > 0)
             {
                 headTeacherId = selectedId;
             }
 
-            if (this.department == null)
+            try
             {
-                Classes.Departments newDept = new Classes.Departments(0, nameTB.Text, headTeacherId);
-                newDept.Add();
-                MessageBox.Show("Отделение добавлено");
+                if (this.department == null)
+                {
+                    Classes.Departments newDept = new Classes.Departments(0, nameTB.Text.Trim(), headTeacherId);
+                    newDept.Add();
+                    MessageBox.Show("✅ Отделение добавлено", "Успех",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    Classes.Departments newDept = new Classes.Departments(department.Id, nameTB.Text.Trim(), headTeacherId);
+                    newDept.Update();
+                    MessageBox.Show("✅ Информация изменена", "Успех",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                MainWindow.init.frame.Navigate(new Departments());
             }
-            else
+            catch (Exception ex)
             {
-                Classes.Departments newDept = new Classes.Departments(department.Id, nameTB.Text, headTeacherId);
-                newDept.Update();
-                MessageBox.Show("Информация изменена");
+                MessageBox.Show(ex.Message, "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            MainWindow.init.frame.Navigate(new Departments());
         }
 
         private void GoBack(object sender, RoutedEventArgs e)

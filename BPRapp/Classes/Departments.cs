@@ -56,6 +56,19 @@ namespace BPRapp.Classes
 
         public void Add()
         {
+            // 🔹 ПРОВЕРКА: Название не пустое
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                throw new Exception("Название отделения не может быть пустым");
+            }
+
+            // 🔹 ПРОВЕРКА: Уникальность названия (регистронезависимая)
+            var existingDepts = Classes.Departments.Select();
+            if (existingDepts.Any(d => d.Name.ToLower() == this.Name.ToLower()))
+            {
+                throw new Exception($"Отделение с названием \"{this.Name}\" уже существует");
+            }
+
             string SQL = "INSERT INTO `departments`(`Name`, `HeadTeacherId`) VALUES (@Name, @HeadTeacherId)";
             MySqlConnection connection = OpenConnection();
             var cmd = new MySqlCommand(SQL, connection);
@@ -67,15 +80,17 @@ namespace BPRapp.Classes
 
         public void Update()
         {
+            // 🔹 ПРОВЕРКА: Название не пустое
             if (string.IsNullOrWhiteSpace(Name))
             {
                 throw new Exception("Название отделения не может быть пустым");
             }
 
+            // 🔹 ПРОВЕРКА: Уникальность названия (исключаем текущую запись)
             var existingDepts = Classes.Departments.Select();
             if (existingDepts.Any(d => d.Name.ToLower() == this.Name.ToLower() && d.Id != Id))
             {
-                throw new Exception($"Отделение \"{this.Name}\" уже существует");
+                throw new Exception($"Отделение с названием \"{this.Name}\" уже существует");
             }
 
             string SQL = "UPDATE `departments` SET `Name`=@Name, `HeadTeacherId`=@HeadTeacherId WHERE `Id`=@Id";
@@ -90,37 +105,43 @@ namespace BPRapp.Classes
 
         public void Delete()
         {
+            // ✅ ИСПРАВЛЕНО: убрано двойное открытие соединения
             MySqlConnection conn = OpenConnection();
-            conn.Open();
 
-            string checkGroupsSQL = "SELECT COUNT(*) FROM `groups` WHERE DepartmentId = @Id";
-            var checkGroupsCmd = new MySqlCommand(checkGroupsSQL, conn);
-            checkGroupsCmd.Parameters.AddWithValue("@Id", Id);
-            int groupCount = Convert.ToInt32(checkGroupsCmd.ExecuteScalar());
+            try
+            {
+                // 🔹 Проверка: есть ли группы, привязанные к отделению
+                string checkGroupsSQL = "SELECT COUNT(*) FROM `groups` WHERE DepartmentId = @Id";
+                var checkGroupsCmd = new MySqlCommand(checkGroupsSQL, conn);
+                checkGroupsCmd.Parameters.AddWithValue("@Id", Id);
+                int groupCount = Convert.ToInt32(checkGroupsCmd.ExecuteScalar());
 
-            if (groupCount > 0)
+                if (groupCount > 0)
+                {
+                    throw new Exception($"Невозможно удалить отделение \"{Name}\": к нему привязано {groupCount} групп.");
+                }
+
+                // 🔹 Проверка: есть ли специальности, привязанные к отделению
+                string checkSpecSQL = "SELECT COUNT(*) FROM `specialties` WHERE DepartmentId = @Id";
+                var checkSpecCmd = new MySqlCommand(checkSpecSQL, conn);
+                checkSpecCmd.Parameters.AddWithValue("@Id", Id);
+                int specCount = Convert.ToInt32(checkSpecCmd.ExecuteScalar());
+
+                if (specCount > 0)
+                {
+                    throw new Exception($"Невозможно удалить отделение \"{Name}\": к нему привязано {specCount} специальностей.");
+                }
+
+                // ✅ Всё чисто — удаляем
+                string deleteSQL = "DELETE FROM `departments` WHERE `Id` = @Id";
+                var deleteCmd = new MySqlCommand(deleteSQL, conn);
+                deleteCmd.Parameters.AddWithValue("@Id", Id);
+                deleteCmd.ExecuteNonQuery();
+            }
+            finally
             {
                 CloseConnection(conn);
-                throw new Exception($"Невозможно удалить отделение \"{Name}\": к нему привязано {groupCount} групп.");
             }
-
-            string checkSpecSQL = "SELECT COUNT(*) FROM specialties WHERE DepartmentId = @Id";
-            var checkSpecCmd = new MySqlCommand(checkSpecSQL, conn);
-            checkSpecCmd.Parameters.AddWithValue("@Id", Id);
-            int specCount = Convert.ToInt32(checkSpecCmd.ExecuteScalar());
-
-            if (specCount > 0)
-            {
-                CloseConnection(conn);
-                throw new Exception($"Невозможно удалить отделение \"{Name}\": к нему привязано {specCount} специальностей.");
-            }
-
-            string deleteSQL = "DELETE FROM `departments` WHERE `Id` = @Id";
-            var deleteCmd = new MySqlCommand(deleteSQL, conn);
-            deleteCmd.Parameters.AddWithValue("@Id", Id);
-            deleteCmd.ExecuteNonQuery();
-
-            CloseConnection(conn);
         }
 
         public string GetHeadTeacherName()

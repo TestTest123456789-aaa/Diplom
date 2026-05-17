@@ -92,8 +92,8 @@ namespace BPRapp.Classes
                 throw new Exception($"Специальность с кодом \"{this.Code}\" уже существует");
             }
 
-            // 🔹 ПРОВЕРКА УНИКАЛЬНОСТИ НАЗВАНИЯ
-            if (existingSpecs.Any(s => s.Name.ToLower() == this.Name.ToLower() && s.Id != Id))
+            // 🔹 ПРОВЕРКА УНИКАЛЬНОСТИ НАЗВАНИЯ (исправлено)
+            if (existingSpecs.Any(s => s.Name.ToLower() == this.Name.ToLower()))
             {
                 throw new Exception($"Специальность с названием \"{this.Name}\" уже существует");
             }
@@ -121,6 +121,12 @@ namespace BPRapp.Classes
                 throw new Exception($"Специальность с кодом \"{this.Code}\" уже существует");
             }
 
+            // 🔹 ПРОВЕРКА УНИКАЛЬНОСТИ НАЗВАНИЯ при обновлении
+            if (existingSpecs.Any(s => s.Name.ToLower() == this.Name.ToLower() && s.Id != Id))
+            {
+                throw new Exception($"Специальность с названием \"{this.Name}\" уже существует");
+            }
+
             string SQL = "UPDATE `specialties` SET `Code`=@Code, `Name`=@Name, `DepartmentId`=@DepartmentId WHERE `Id`=@Id";
             MySqlConnection connection = OpenConnection();
             var cmd = new MySqlCommand(SQL, connection);
@@ -136,24 +142,29 @@ namespace BPRapp.Classes
         {
             MySqlConnection conn = OpenConnection();
 
-            string checkSQL = "SELECT COUNT(*) FROM `groups` WHERE SpecialtyId = @Id";
-            var checkCmd = new MySqlCommand(checkSQL, conn);
-            checkCmd.Parameters.AddWithValue("@Id", Id);
-            int usageCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+            try
+            {
+                // 🔹 Проверка: есть ли группы, привязанные к специальности
+                string checkSQL = "SELECT COUNT(*) FROM `groups` WHERE SpecialtyId = @Id";
+                var checkCmd = new MySqlCommand(checkSQL, conn);
+                checkCmd.Parameters.AddWithValue("@Id", Id);
+                int usageCount = Convert.ToInt32(checkCmd.ExecuteScalar());
 
-            if (usageCount > 0)
+                if (usageCount > 0)
+                {
+                    throw new Exception($"Невозможно удалить специальность \"{Code} {Name}\": к ней привязано {usageCount} групп.");
+                }
+
+                // ✅ Всё чисто — удаляем
+                string deleteSQL = "DELETE FROM `specialties` WHERE `Id` = @Id";
+                var deleteCmd = new MySqlCommand(deleteSQL, conn);
+                deleteCmd.Parameters.AddWithValue("@Id", Id);
+                deleteCmd.ExecuteNonQuery();
+            }
+            finally
             {
                 CloseConnection(conn);
-                throw new Exception($"Невозможно удалить специальность \"{Code} {Name}\": к ней привязано {usageCount} групп.");
             }
-
-            // Удаляем
-            string deleteSQL = "DELETE FROM `specialties` WHERE `Id` = @Id";
-            var deleteCmd = new MySqlCommand(deleteSQL, conn);
-            deleteCmd.Parameters.AddWithValue("@Id", Id);
-            deleteCmd.ExecuteNonQuery();
-
-            CloseConnection(conn);
         }
     }
 }

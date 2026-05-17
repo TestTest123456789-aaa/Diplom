@@ -27,8 +27,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Specialties
         {
             if (string.IsNullOrWhiteSpace(codeTB.Text) || string.IsNullOrWhiteSpace(nameTB.Text))
             {
-                MessageBox.Show("Заполните все поля", "Ошибка",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Заполните все поля", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -39,19 +38,17 @@ namespace BPRapp.Pages.MainMenuTeachers.Specialties
                     Classes.Specialties newSpec = new Classes.Specialties(
                         0, codeTB.Text.Trim(), nameTB.Text.Trim(), departmentId);
                     newSpec.Add();
-                    MessageBox.Show("✅ Специальность добавлена", "Успех",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("✅ Специальность добавлена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
                     Classes.Specialties updatedSpec = new Classes.Specialties(
                         specialty.Id, codeTB.Text.Trim(), nameTB.Text.Trim(), specialty.DepartmentId);
                     updatedSpec.Update();
-                    MessageBox.Show("✅ Информация изменена", "Успех",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("✅ Информация изменена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
-                // Возврат на предыдущую страницу
+                // 🔹 Возврат на страницу, с которой пришли
                 GoBack(null, null);
             }
             catch (Exception ex)

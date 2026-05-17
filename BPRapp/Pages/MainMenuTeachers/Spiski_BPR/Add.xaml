@@ -1,10 +1,10 @@
 ﻿<Page x:Class="BPRapp.Pages.MainMenuTeachers.Spiski_BPR.Add"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Spiski_BPR"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="700" d:DesignWidth="950"
       Title="Добавить/Изменить ВПР">
 
@@ -57,6 +57,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- ✅ ИСПРАВЛЕННЫЙ СТИЛЬ COMBOBOX С ПОДДЕРЖКОЙ РЕДАКТИРОВАНИЯ -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#C5D5E5"/>
@@ -64,24 +66,59 @@
             <Setter Property="Padding" Value="6,4"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="StaysOpenOnEdit" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
-                                <ContentPresenter Content="{TemplateBinding Text}" Margin="6,0" VerticalAlignment="Center"/>
+                            <Border x:Name="border" Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="5">
+                                <Grid>
+                                    <!-- TextBox для редактируемого режима -->
+                                    <TextBox x:Name="PART_EditableTextBox"
+                                             Visibility="Collapsed"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             Padding="6,0"
+                                             VerticalContentAlignment="Center"
+                                             Margin="0,0,24,0"/>
+                                    <!-- ContentPresenter для обычного режима -->
+                                    <ContentPresenter x:Name="contentPresenter"
+                                                      Content="{TemplateBinding Text}"
+                                                      Margin="6,0"
+                                                      VerticalAlignment="Center"/>
+                                </Grid>
                             </Border>
-                            <ToggleButton Grid.Column="1" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" HorizontalAlignment="Right" Width="24" Background="Transparent" BorderThickness="0">
-                                <Path Data="M0,0 L4,4 L8,0 Z" Fill="{StaticResource DarkBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="6" Height="4"/>
+                            <ToggleButton Grid.Column="1" Focusable="false"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press" HorizontalAlignment="Right" Width="24"
+                                        Background="Transparent" BorderThickness="0">
+                                <Path Data="M0,0 L4,4 L8,0 Z" Fill="{StaticResource DarkBlueBrush}"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center" Width="6" Height="4"/>
                             </ToggleButton>
-                            <Popup x:Name="PART_Popup" AllowsTransparency="true" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" PopupAnimation="Slide">
-                                <Border Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}" BorderThickness="1" CornerRadius="5" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
+                            <Popup x:Name="PART_Popup" AllowsTransparency="true"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" PopupAnimation="Slide">
+                                <Border Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}"
+                                        BorderThickness="1" CornerRadius="5" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
                                     <ScrollViewer>
                                         <ItemsPresenter/>
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEditable" Value="True">
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="contentPresenter" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                                <Setter TargetName="border" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -138,23 +175,35 @@
                             <TextBlock Text="Время окончания" FontWeight="SemiBold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,6"/>
                             <TextBox x:Name="endTimeTB" Style="{StaticResource ModernTextBox}" ToolTip="ЧЧ:ММ"/>
                         </StackPanel>
+                        <!-- ✅ ИСПРАВЛЕНО: Поиск по названию кабинета -->
                         <StackPanel Margin="0,0,0,18">
                             <TextBlock Text="Кабинет" FontWeight="SemiBold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,6"/>
-                            <ComboBox x:Name="roomCB" Style="{StaticResource ModernComboBox}" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="roomCB" Style="{StaticResource ModernComboBox}" SelectedValuePath="Id"
+                                      IsTextSearchEnabled="True" TextSearch.TextPath="DisplayName"
+                                      ToolTip="Начните вводить название кабинета"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Column="2">
+                        <!-- ✅ ИСПРАВЛЕНО: Поиск по названию группы -->
                         <StackPanel Margin="0,0,0,18">
                             <TextBlock Text="Группа" FontWeight="SemiBold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,6"/>
-                            <ComboBox x:Name="groupCB" Style="{StaticResource ModernComboBox}" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="groupCB" Style="{StaticResource ModernComboBox}" SelectedValuePath="Id"
+                                      IsTextSearchEnabled="True" TextSearch.TextPath="DisplayName"
+                                      ToolTip="Начните вводить название группы"/>
                         </StackPanel>
+                        <!-- ✅ ИСПРАВЛЕНО: Поиск по ФИО преподавателя -->
                         <StackPanel Margin="0,0,0,18">
                             <TextBlock Text="Ответственный преподаватель" FontWeight="SemiBold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,6"/>
-                            <ComboBox x:Name="teacherCB" Style="{StaticResource ModernComboBox}" DisplayMemberPath="FIO" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="teacherCB" Style="{StaticResource ModernComboBox}" DisplayMemberPath="FIO" SelectedValuePath="Id"
+                                      IsTextSearchEnabled="True" TextSearch.TextPath="FIO"
+                                      ToolTip="Начните вводить ФИО преподавателя"/>
                         </StackPanel>
+                        <!-- ✅ ИСПРАВЛЕНО: Поиск по названию предмета -->
                         <StackPanel Margin="0,0,0,18">
                             <TextBlock Text="Предмет" FontWeight="SemiBold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,6"/>
-                            <ComboBox x:Name="lessonCB" Style="{StaticResource ModernComboBox}" DisplayMemberPath="Lesson" SelectedValuePath="Id"/>
+                            <ComboBox x:Name="lessonCB" Style="{StaticResource ModernComboBox}" DisplayMemberPath="Lesson" SelectedValuePath="Id"
+                                      IsTextSearchEnabled="True" TextSearch.TextPath="Lesson"
+                                      ToolTip="Начните вводить название предмета"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
