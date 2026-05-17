@@ -163,6 +163,26 @@
                     <Button Content="Войти в систему" Click="Authorize" 
                             Height="50" Margin="0,30,0,0"
                             Style="{StaticResource ModernButton}"/>
+                    <!-- Кнопка восстановления пароля -->
+                    <Button Content="Забыли пароль?" Click="GoToRecovery"
+                            Height="35" Margin="0,15,0,0"
+                            Background="Transparent" Foreground="{StaticResource PrimaryBlueBrush}"
+                            FontWeight="SemiBold" Cursor="Hand" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="5">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
+                                        <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
                 </StackPanel>
 
                 <!-- Подвал -->
