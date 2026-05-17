@@ -68,5 +68,15 @@ namespace BPRapp.Pages.MainMenuTeachers.Lessons
         private void OpenLessons(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Lessons());
         private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
         private void AddLesson(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Add());
+
+        private void OpenNotificationSettings(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(Classes.CurrentUser.Email))
+            {
+                System.Windows.MessageBox.Show("У вас не указан Email. Уведомления недоступны.", "Внимание", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
+            MainWindow.init.frame.Navigate(new Pages.NotificationSettings(Classes.CurrentUser.Email));
+        }
     }
 }

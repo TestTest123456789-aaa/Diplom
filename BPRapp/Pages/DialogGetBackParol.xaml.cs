@@ -9,10 +9,9 @@ namespace BPRapp.Pages
     {
         private readonly string _email;
 
-        // Конструктор принимает email, который передала предыдущая страница
         public DialogGetBackParol(string email)
         {
-            InitializeComponent(); // ⚠️ Обязателен для привязки XAML к C#
+            InitializeComponent();
             _email = email;
         }
 
@@ -22,20 +21,20 @@ namespace BPRapp.Pages
 
             if (string.IsNullOrEmpty(code) || code.Length != 6)
             {
-                MessageBox.Show("Введите корректный 6-значный код", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Введите корректный 6-значный код", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // Проверяем код через EmailService
             if (EmailService.ValidateCode(_email, code))
             {
                 EmailService.MarkCodeAsUsed(_email, code);
-                // Переходим на страницу смены пароля, передавая email
-                MainWindow.init.frame.Navigate(new NewParol(_email));
+                MainWindow.init.frame.Navigate(new ChangePassword(_email));
             }
             else
             {
-                MessageBox.Show("Неверный или истёкший код", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Неверный или истёкший код", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

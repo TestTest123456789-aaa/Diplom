@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BPRapp.Pages.MainMenuTeachers.Spiski_BPR"
              mc:Ignorable="d" 
-            d:DesignHeight="200" d:DesignWidth="1000">
+             d:DesignHeight="200" d:DesignWidth="1000">
     <UserControl.Resources>
         <Color x:Key="PrimaryBlue">#5B9BD5</Color>
         <Color x:Key="DarkBlue">#2E5C8A</Color>
@@ -61,7 +61,6 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
                     <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,10,5">
                         <TextBlock Text="Дата:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
                         <TextBox x:Name="dateTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
@@ -74,7 +73,6 @@
                         <TextBlock Text="Кабинет:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
                         <TextBox x:Name="roomTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
-
                     <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,5,10,5">
                         <TextBlock Text="Ответственный:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
                         <TextBox x:Name="respTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
@@ -87,7 +85,6 @@
                         <TextBlock Text="Группа:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
                         <TextBox x:Name="groupTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
                     </StackPanel>
-
                     <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,5,10,0">
                         <TextBlock Text="Рук. группы:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
                         <TextBox x:Name="headTB" IsEnabled="False" Height="26" Padding="8,0" Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>

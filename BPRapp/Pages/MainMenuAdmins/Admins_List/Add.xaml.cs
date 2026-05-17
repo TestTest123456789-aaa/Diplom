@@ -1,70 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BPRapp.Pages.MainMenuAdmins.Admins_List
 {
     public partial class Add : Page
     {
-        Classes.Users users;
+        private Classes.Users _users;
+
         public Add(Classes.Users users = null)
         {
             InitializeComponent();
             if (users != null)
             {
-                this.users = users;
+                _users = users;
                 FIOTB.Text = users.FIO;
                 loginTB.Text = users.Login;
                 parolTB.Text = users.Parol;
                 users.Role = "Администратор";
                 emailTB.Text = users.Email;
                 phone_numberTB.Text = users.Phone_Number;
-                BthAdd.Content = $"Изменить запись";
+                BthAdd.Content = $"✏️ Изменить";
             }
         }
 
         private void AddAdmin(object sender, RoutedEventArgs e)
         {
-            if (this.users == null)
+            if (string.IsNullOrWhiteSpace(FIOTB.Text) || string.IsNullOrWhiteSpace(loginTB.Text) || string.IsNullOrWhiteSpace(parolTB.Text))
             {
-                Classes.Users newUsers = new Classes.Users(
-                    0,
-                    FIOTB.Text,
-                    loginTB.Text,
-                    parolTB.Text,
-                    "Администратор",
-                    emailTB.Text,
-                    phone_numberTB.Text
-                );
-                newUsers.Add();
-                MessageBox.Show("Администратор добавлен");
+                MessageBox.Show("❗ Заполните все обязательные поля (*).", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            else
+
+            try
             {
-                Classes.Users newUsers = new Classes.Users(
-                    users.Id,
-                    FIOTB.Text,
-                    loginTB.Text,
-                    parolTB.Text,
-                    "Администратор",
-                    emailTB.Text,
-                    phone_numberTB.Text
-                );
-                newUsers.Update();
-                MessageBox.Show("Информация изменена");
+                if (_users == null)
+                {
+                    var newUsers = new Classes.Users(
+                        0, FIOTB.Text, loginTB.Text, parolTB.Text, "Администратор", emailTB.Text, phone_numberTB.Text);
+
+                    if (!newUsers.ValidateNoDuplicates(out string errorMsg))
+                    {
+                        MessageBox.Show(errorMsg, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    newUsers.Add();
+                    MessageBox.Show("✅ Администратор успешно добавлен", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    var updatedUsers = new Classes.Users(
+                        _users.Id, FIOTB.Text, loginTB.Text, parolTB.Text, "Администратор", emailTB.Text, phone_numberTB.Text);
+
+                    if (!updatedUsers.ValidateNoDuplicates(out string errorMsg))
+                    {
+                        MessageBox.Show(errorMsg, "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    updatedUsers.Update();
+                    MessageBox.Show("✅ Информация успешно обновлена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                MainWindow.init.frame.Navigate(new Pages.MainMenuAdmins.Admins_List.Admins_List());
             }
-            MainWindow.init.frame.Navigate(new Pages.MainMenuAdmins.Admins_List.Admins_List());
+            catch (Exception ex)
+            {
+                MessageBox.Show($"❌ Ошибка сохранения: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void GoBack(object sender, RoutedEventArgs e)

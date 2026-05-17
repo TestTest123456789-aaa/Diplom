@@ -1,8 +1,10 @@
-﻿using System.Net;
-using System.Net.Mail;
-using System;
+﻿using System;
 using System.Configuration;
 using MySql.Data.MySqlClient;
+using System.Diagnostics;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 namespace BPRapp.Classes
 {
@@ -20,105 +22,72 @@ namespace BPRapp.Classes
         private static string SenderPassword =>
             ConfigurationManager.AppSettings["SenderPassword"] ?? "";
 
-        private static bool EnableSsl =>
-            bool.TryParse(ConfigurationManager.AppSettings["EnableSsl"], out var ssl) && ssl;
-
         public static bool SendRecoveryCode(string recipientEmail, string code)
         {
             try
             {
-                // Проверка настроек
                 if (string.IsNullOrEmpty(SenderEmail))
                 {
-                    System.Diagnostics.Debug.WriteLine("❌ Ошибка: SenderEmail не задан в App.config");
-                    return false;
-                }
-                if (string.IsNullOrEmpty(SenderPassword) || SenderPassword == "xxxx xxxx xxxx xxxx" || SenderPassword.Length < 10)
-                {
-                    System.Diagnostics.Debug.WriteLine("❌ Ошибка: SenderPassword не задан или недействителен в App.config");
-                    System.Diagnostics.Debug.WriteLine($"   Текущее значение: '{SenderPassword}'");
-                    System.Diagnostics.Debug.WriteLine("   Для Gmail создайте App Password: https://myaccount.google.com/security");
+                    Debug.WriteLine("❌ Ошибка: SenderEmail не задан");
                     return false;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"📧 Попытка отправки письма...");
-                System.Diagnostics.Debug.WriteLine($"   SMTP Server: {SmtpServer}:{SmtpPort}");
-                System.Diagnostics.Debug.WriteLine($"   SSL: {EnableSsl}");
-                System.Diagnostics.Debug.WriteLine($"   From: {SenderEmail}");
-                System.Diagnostics.Debug.WriteLine($"   To: {recipientEmail}");
+                string cleanPassword = SenderPassword.Replace(" ", "").Trim();
 
-                var client = new SmtpClient(SmtpServer, SmtpPort)
+                if (string.IsNullOrEmpty(cleanPassword) || cleanPassword.Length < 10)
                 {
-                    Credentials = new NetworkCredential(SenderEmail, SenderPassword),
-                    EnableSsl = EnableSsl,
-                    Timeout = 30000,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false
-                };
+                    Debug.WriteLine("❌ Ошибка: SenderPassword слишком короткий");
+                    return false;
+                }
 
-                var mail = new MailMessage(SenderEmail, recipientEmail)
+                Debug.WriteLine($"📧 Отправка через MailKit...");
+                Debug.WriteLine($"   SMTP: {SmtpServer}:{SmtpPort}");
+                Debug.WriteLine($"   From: {SenderEmail}");
+                Debug.WriteLine($"   To: {recipientEmail}");
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Система ВПР", SenderEmail));
+                message.To.Add(new MailboxAddress("", recipientEmail));
+                message.Subject = "🔐 Восстановление пароля - Система ВПР";
+                message.Body = new TextPart("plain")
                 {
-                    Subject = "🔐 Восстановление пароля - Система ВПР",
-                    Body = $"Здравствуйте!\n\n" +
+                    Text = $"Здравствуйте!\n\n" +
                            $"Ваш код восстановления пароля: {code}\n" +
-                           $"Код действителен в течение 15 минут.\n" +
-                           $"Если вы не запрашивали восстановление, проигнорируйте это письмо.\n\n" +
-                           $"С уважением, Администрация ВПР",
-                    IsBodyHtml = false
+                           $"Код действителен в течение 15 минут.\n\n" +
+                           $"С уважением, Администрация ВПР"
                 };
 
-                client.Send(mail);
-                System.Diagnostics.Debug.WriteLine($"✅ Письмо успешно отправлено на {recipientEmail}");
+                using (var client = new SmtpClient())
+                {
+                    // Для порта 587 используем StartTls
+                    client.Connect(SmtpServer, SmtpPort, SecureSocketOptions.StartTls);
+
+                    // Аутентификация
+                    client.Authenticate(SenderEmail, cleanPassword);
+
+                    // Отправка
+                    client.Send(message);
+
+                    // Отключение
+                    client.Disconnect(true);
+                }
+
+                Debug.WriteLine($"✅ Письмо успешно отправлено!");
                 return true;
-            }
-            catch (SmtpException smtpEx)
-            {
-                System.Diagnostics.Debug.WriteLine($"❌ SMTP ошибка: {smtpEx.Message}");
-                System.Diagnostics.Debug.WriteLine($"   StatusCode: {smtpEx.StatusCode}");
-                System.Diagnostics.Debug.WriteLine($"   Server: {SmtpServer}:{SmtpPort}");
-                System.Diagnostics.Debug.WriteLine($"   From: {SenderEmail}");
-
-                if (smtpEx.InnerException != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"   Inner Exception: {smtpEx.InnerException.Message}");
-                    if (smtpEx.InnerException.InnerException != null)
-                        System.Diagnostics.Debug.WriteLine($"   Inner-Inner: {smtpEx.InnerException.InnerException.Message}");
-                }
-
-                // Подсказки для частых ошибок
-                if (smtpEx.StatusCode == SmtpStatusCode.AuthenticationFailed)
-                {
-                    System.Diagnostics.Debug.WriteLine("\n💡 ПОДСКАЗКА: Неверный пароль. Для Gmail используйте App Password, а не обычный пароль.");
-                    System.Diagnostics.Debug.WriteLine("   Как создать: https://support.google.com/accounts/answer/185833");
-                }
-                else if (smtpEx.Message.Contains("535") || smtpEx.Message.Contains("Authentication"))
-                {
-                    System.Diagnostics.Debug.WriteLine("\n💡 ПОДСКАЗКА: Требуется App Password для Gmail.");
-                    System.Diagnostics.Debug.WriteLine("   1. Включите 2FA в аккаунте Google");
-                    System.Diagnostics.Debug.WriteLine("   2. Перейдите: https://myaccount.google.com/security");
-                    System.Diagnostics.Debug.WriteLine("   3. Создайте App Password для 'Mail' и 'Windows Computer'");
-                    System.Diagnostics.Debug.WriteLine("   4. Вставьте 16-значный код без пробелов в App.config");
-                }
-
-                return false;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"❌ Общая ошибка: {ex.GetType().Name}");
-                System.Diagnostics.Debug.WriteLine($"   Message: {ex.Message}");
+                Debug.WriteLine($"\n❌ ОШИБКА: {ex.Message}");
                 if (ex.InnerException != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"   Inner: {ex.InnerException.Message}");
-                    if (ex.InnerException.InnerException != null)
-                        System.Diagnostics.Debug.WriteLine($"   Inner-Inner: {ex.InnerException.InnerException.Message}");
-                }
+                    Debug.WriteLine($"   Inner: {ex.InnerException.Message}");
                 return false;
             }
         }
 
         public static string GenerateCode()
         {
-            return new Random().Next(100000, 999999).ToString();
+            Random random = new Random();
+            return random.Next(100000, 999999).ToString();
         }
 
         public static bool ValidateCode(string email, string code)
@@ -128,8 +97,23 @@ namespace BPRapp.Classes
             var cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@Email", email);
             cmd.Parameters.AddWithValue("@Code", code);
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            Connection.CloseConnection(connection);
+
+            int count = 0;
+            try
+            {
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                    count = Convert.ToInt32(result);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка БД: {ex.Message}");
+            }
+            finally
+            {
+                Connection.CloseConnection(connection);
+            }
+
             return count > 0;
         }
 
@@ -140,8 +124,19 @@ namespace BPRapp.Classes
             var cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@Email", email);
             cmd.Parameters.AddWithValue("@Code", code);
-            cmd.ExecuteNonQuery();
-            Connection.CloseConnection(connection);
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Ошибка БД: {ex.Message}");
+            }
+            finally
+            {
+                Connection.CloseConnection(connection);
+            }
         }
     }
 }

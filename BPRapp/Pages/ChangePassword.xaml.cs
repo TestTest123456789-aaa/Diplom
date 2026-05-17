@@ -1,19 +1,10 @@
 ﻿using BPRapp.Classes;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BPRapp.Pages
 {
@@ -57,18 +48,17 @@ namespace BPRapp.Pages
             if (newPassword != confirmPassword)
             {
                 statusText.Text = "Пароли не совпадают";
-                statusText.Foreground = System.Windows.Media.Brushes.Red;
+                statusText.Foreground = Brushes.Red;
                 return;
             }
 
             if (!ValidatePassword(newPassword, out string error))
             {
                 statusText.Text = error;
-                statusText.Foreground = System.Windows.Media.Brushes.Red;
+                statusText.Foreground = Brushes.Red;
                 return;
             }
 
-            // Находим пользователя и обновляем пароль
             var user = Users.Select().FirstOrDefault(u => u.Email?.ToLower() == _email?.ToLower());
             if (user != null)
             {
@@ -76,9 +66,8 @@ namespace BPRapp.Pages
                 user.Update();
 
                 statusText.Text = "✅ Пароль успешно изменён!";
-                statusText.Foreground = System.Windows.Media.Brushes.Green;
+                statusText.Foreground = Brushes.Green;
 
-                // Возврат на авторизацию через 2 секунды
                 System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
                 timer.Interval = TimeSpan.FromSeconds(2);
                 timer.Tick += (s, args) =>
@@ -91,13 +80,13 @@ namespace BPRapp.Pages
             else
             {
                 statusText.Text = "❌ Ошибка обновления пароля";
-                statusText.Foreground = System.Windows.Media.Brushes.Red;
+                statusText.Foreground = Brushes.Red;
             }
         }
 
         private void GoBack(object sender, RoutedEventArgs e)
         {
-            MainWindow.init.frame.Navigate(new Pages.EnterRecoveryCode(_email));
+            MainWindow.init.frame.Navigate(new Pages.GetBackParol());
         }
     }
 }

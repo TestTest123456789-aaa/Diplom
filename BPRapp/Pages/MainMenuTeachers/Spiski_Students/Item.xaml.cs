@@ -1,8 +1,7 @@
 ﻿using BPRapp.Classes;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace BPRapp.Pages.MainMenuTeachers.Spiski_Students
 {
@@ -10,9 +9,16 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_Students
     {
         private Student_Info student_Info;
         private int currentBprId;
-        public Item(Student_Info student_Info, int bprId)
+
+        // ✅ 1. Пустой конструктор для дизайнера XAML
+        public Item()
         {
             InitializeComponent();
+        }
+
+        // ✅ 2. Основной конструктор (Fix CS1729)
+        public Item(Student_Info student_Info, int bprId) : this()
+        {
             this.student_Info = student_Info;
             this.currentBprId = bprId;
 

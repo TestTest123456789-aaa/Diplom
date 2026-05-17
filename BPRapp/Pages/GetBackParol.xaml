@@ -5,21 +5,188 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BPRapp.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="GetBackParol">
+      d:DesignHeight="600" d:DesignWidth="500"
+      Title="Восстановление пароля">
 
+    <Page.Resources>
+        <!-- 🎨 Корпоративные цвета -->
+        <Color x:Key="PrimaryBlue">#5B9BD5</Color>
+        <Color x:Key="DarkBlue">#2E5C8A</Color>
+        <Color x:Key="LightBlue">#E8F4FC</Color>
+        <Color x:Key="White">#FFFFFF</Color>
+
+        <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
+        <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
+        <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
+
+        <!-- ✨ Тень -->
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="30" ShadowDepth="10" 
+                          Color="#333333" Opacity="0.3" Direction="315"/>
+
+        <!-- 🔘 Стиль кнопки -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource DarkBlueBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 📝 Стиль TextBox -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#FAFAFA"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="8,0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <!-- 🎨 Градиентный фон -->
     <Grid>
-        <Grid Background="CadetBlue" Height="45" VerticalAlignment="Top">
-            <Label Content="ВПР" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" Margin="0,0,0,0" FontSize="19" FontFamily="MV Boli" Grid.Column="1" />
-        </Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#2E8B57" Offset="0.0"/>
+                <GradientStop Color="#20B2AA" Offset="0.5"/>
+                <GradientStop Color="#4682B4" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Grid Margin="0,45,0,0" Background="White">
-            <Label Content="Восстановление пароля" HorizontalContentAlignment="Center" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Width="340" Margin="0,0,0,0" Foreground="CadetBlue"/>
-            <Button Content="Назад" HorizontalAlignment="Left" Click ="GoBack" Foreground="White"  VerticalAlignment="Top" Width="60" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="10,10,0,0"/>
-            <Label Content="Укажите адрес электронной почты к которой привязан ваш аккаунт:" Margin="0,0,7,160" VerticalAlignment="Center" HorizontalAlignment="Center" Height="26"/>
-            <TextBox x:Name="emailTB" HorizontalAlignment="Center" Margin="0,0,0,100" Width="400" Height="32" Background="White" BorderBrush="Black" BorderThickness="1" VerticalAlignment="Center"/>
-            <Button Content="Отправить электронную почту" HorizontalAlignment="Center" Click ="SendEmail" Foreground="White"  VerticalAlignment="Center" Width="200" Height="30" Background="CadetBlue" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0"/>
-        </Grid>
+        <!-- Декоративные элементы -->
+        <Canvas>
+            <Ellipse Width="250" Height="250" Fill="White" Opacity="0.1" 
+                     Canvas.Left="30" Canvas.Top="80"/>
+            <Ellipse Width="180" Height="180" Fill="White" Opacity="0.1" 
+                     Canvas.Right="80" Canvas.Bottom="120"/>
+        </Canvas>
+
+        <!-- 🔷 Форма восстановления -->
+        <Border Background="White" CornerRadius="20" Width="420" Height="500"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Effect="{StaticResource CardShadow}">
+            <Grid Margin="35">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Заголовок -->
+                <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <Border Background="{StaticResource PrimaryBlueBrush}" 
+                            Width="75" Height="75" CornerRadius="38" 
+                            HorizontalAlignment="Center" Margin="0,0,0,15">
+                        <TextBlock Text="🔐" FontSize="36" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Восстановление пароля" FontSize="24" FontWeight="Bold" 
+                               Foreground="{StaticResource DarkBlueBrush}" 
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Введите email для получения кода" FontSize="14" 
+                               Foreground="Gray" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <!-- Поля ввода -->
+                <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                    <TextBlock Text="Адрес электронной почты" FontWeight="SemiBold" 
+                               Foreground="#333" Margin="0,0,0,10" FontSize="13"/>
+                    <Border BorderBrush="#DDD" BorderThickness="1.5" CornerRadius="10" 
+                            Background="#FAFAFA">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="45"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="📧" FontSize="20" 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                            <TextBox x:Name="emailTB" Grid.Column="1" 
+                                     BorderThickness="0" Background="Transparent"
+                                     Style="{StaticResource ModernTextBox}"
+                                     TextChanged="EmailTB_TextChanged"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Подсказка под полем -->
+                    <TextBlock x:Name="emailHint" Text="" 
+                               FontSize="11" Foreground="OrangeRed" 
+                               Margin="0,5,0,0" Visibility="Collapsed"/>
+
+                    <!-- Кнопка отправки -->
+                    <Button Content="📤 Отправить код" Click="SendEmail" 
+                            Height="50" Margin="0,35,0,0"
+                            Style="{StaticResource ModernButton}"
+                            x:Name="SendButton"/>
+
+                    <!-- Кнопка возврата -->
+                    <Button Content="← Вернуться к авторизации" Click="GoBack" 
+                            Height="38" Margin="0,18,0,0"
+                            Background="Transparent" Foreground="{StaticResource PrimaryBlueBrush}"
+                            FontWeight="SemiBold" Cursor="Hand" BorderThickness="0" FontSize="13">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
+                                        <Setter Property="Background" Value="{StaticResource LightBlueBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+
+                <!-- Подвал -->
+                <StackPanel Grid.Row="2" HorizontalAlignment="Center">
+                    <TextBlock Text="© 2026 Система управления ВПР" 
+                               Foreground="#999" FontSize="10" 
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="КГПАОУ Авиационный техникум им. А.Д. Швецова" 
+                               Foreground="#999" FontSize="9" 
+                               HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Page>
-

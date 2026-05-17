@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace BPRapp.Pages.MainMenuAdmins.Teachers_List
@@ -6,6 +7,7 @@ namespace BPRapp.Pages.MainMenuAdmins.Teachers_List
     public partial class Item : UserControl
     {
         Classes.Users user;
+
         public Item(Classes.Users user)
         {
             InitializeComponent();
@@ -24,9 +26,25 @@ namespace BPRapp.Pages.MainMenuAdmins.Teachers_List
 
         private void DeleteTeachers(object sender, RoutedEventArgs e)
         {
-            user.Delete();
-            Classes.Users.Select();
-            MainWindow.init.frame.Navigate(new Pages.MainMenuAdmins.Teachers_List.Teachers_List());
+            var result = MessageBox.Show(
+                $"⚠️ Вы действительно хотите удалить преподавателя \"{user.FIO}\"?\n\nЭто действие нельзя отменить.",
+                "Подтверждение удаления",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    user.Delete();
+                    MessageBox.Show($"✅ Преподаватель \"{user.FIO}\" успешно удален", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MainWindow.init.frame.Navigate(new Pages.MainMenuAdmins.Teachers_List.Teachers_List());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Невозможно удалить", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

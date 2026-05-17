@@ -23,6 +23,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
 
         private void Spiski_BPR_Loaded(object sender, RoutedEventArgs e)
         {
+            // Загрузка информации о пользователе
             if (FioLbl != null)
             {
                 if (Classes.CurrentUser.IsAuthenticated && !string.IsNullOrEmpty(Classes.CurrentUser.FIO))
@@ -43,6 +44,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
                     ContactLbl.Text = "";
                 }
             }
+
             LoadData();
             ApplyFilters();
         }
@@ -94,14 +96,17 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
                 .OrderBy(b =>
                 {
                     string t = b.Time.Contains("-") ? b.Time.Split('-')[0].Trim() : b.Time.Trim();
-                    DateTime.TryParse($"{b.Date} {t}", out var dt);
-                    return dt;
+                    if (DateTime.TryParse($"{b.Date} {t}", out var dt)) return dt;
+                    return DateTime.MaxValue;
                 })
                 .ToList();
 
+            // ✅ ДОБАВЛЕНИЕ ЭЛЕМЕНТОВ В СПИСОК (вместо ItemsSource)
             Spiski_BPRParent.Children.Clear();
             foreach (var bpr in sorted)
+            {
                 Spiski_BPRParent.Children.Add(new Item(bpr));
+            }
         }
 
         private void ToggleMyBPR(object sender, RoutedEventArgs e)
@@ -132,5 +137,14 @@ namespace BPRapp.Pages.MainMenuTeachers.Spiski_BPR
         private void OpenLessons(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Lessons());
         private void AddSpisok_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Spiski_BPR.Add());
         private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
+        private void OpenNotificationSettings(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(Classes.CurrentUser.Email))
+            {
+                MessageBox.Show("У вас не указан Email. Уведомления недоступны.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            MainWindow.init.frame.Navigate(new Pages.NotificationSettings(Classes.CurrentUser.Email));
+        }
     }
 }

@@ -1,56 +1,103 @@
 ﻿<UserControl x:Class="BPRapp.Pages.MainMenuAdmins.Teachers_List.Item"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:BPRapp.Pages.MainMenuAdmins.Teachers_List"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10">
-        <Border BorderBrush="CadetBlue" BorderThickness="1" Background="White" CornerRadius="20" VerticalAlignment="Top" Height="135">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="5" Opacity="0.5"/>
-            </Border.Effect>
-            <Grid Margin="15">
-                <Button Content="Изменить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="25" BorderBrush="CadetBlue" Background="CadetBlue" Foreground="White" FontWeight="Bold" Click="EditTeachers" Margin="0,26,0,0"/>
-                <Button Content="Удалить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="25" BorderBrush="#E41613" Background="#E41613" Foreground="White" FontWeight="Bold" Margin="0,76,0,0" Click="DeleteTeachers"/>
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="900">
+    <UserControl.Resources>
+        <Color x:Key="PrimaryBlue">#5B9BD5</Color>
+        <Color x:Key="DarkBlue">#2E5C8A</Color>
+        <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
+        <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" 
+                         Color="#333333" Opacity="0.15" Direction="315"/>
+    </UserControl.Resources>
 
-                <Grid Margin="73,0,0,0">
+    <Grid Margin="5">
+        <Border Background="White" CornerRadius="12" Padding="15" 
+               BorderBrush="#C5D5E5" BorderThickness="1" Effect="{StaticResource CardShadow}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 🔘 Кнопки действий -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <Button Content="✏️ Изменить" Click="EditTeachers" 
+                           Width="120" Height="30" Margin="0,0,0,8" 
+                           Background="#4CAF50" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Content="🗑️ Удалить" Click="DeleteTeachers" 
+                           Width="120" Height="30" 
+                           Background="#F44336" Foreground="White" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+
+                <!-- 📋 Информация -->
+                <Grid Grid.Column="1" Margin="10,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="50*"/>
-                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="ФИО:" Margin="0,0,10,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="FIOTB" IsEnabled="False" Margin="0,26,10,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10,0">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Логин:" Margin="0,0,10,0" VerticalAlignment="Top" Grid.Column="1"/>
-                    <TextBox x:Name="loginTB" IsEnabled="False" Margin="0,26,10,0" Height="25" Grid.Column="1" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Пароль:" Margin="0,0,10,0" VerticalAlignment="Top" Grid.Column="2"/>
-                    <TextBox x:Name="parolTB" IsEnabled="False" Margin="0,26,10,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="2">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Электронная почта: " Margin="0,50,10,0" VerticalAlignment="Top" Grid.Column="1"/>
-                    <TextBox x:Name="emailTB" IsEnabled="False" Margin="0,76,10,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="1">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
-                    <Label Content="Номер телефона: " Margin="0,50,10,0" VerticalAlignment="Top" Grid.Column="0"/>
-                    <TextBox x:Name="phone_numberTB" IsEnabled="False" Margin="0,76,10,0" Height="25" TextWrapping="Wrap" Text="" VerticalContentAlignment="Center" VerticalAlignment="Top" Padding="10, 0" Grid.Column="0">
-                        <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="Black" Direction="315" ShadowDepth="2" Opacity="0.5"/>
-                        </TextBox.Effect>
-                    </TextBox>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0 -->
+                    <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,10,5">
+                        <TextBlock Text="ФИО:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="FIOTB" IsEnabled="False" Height="28" 
+                                VerticalContentAlignment="Center" Padding="8,0" 
+                                Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,0,0,5">
+                        <TextBlock Text="Логин:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="loginTB" IsEnabled="False" Height="28" 
+                                VerticalContentAlignment="Center" Padding="8,0" 
+                                Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+
+                    <!-- Row 1 -->
+                    <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,5,10,5">
+                        <TextBlock Text="Email:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="emailTB" IsEnabled="False" Height="28" 
+                                VerticalContentAlignment="Center" Padding="8,0" 
+                                Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,5,0,5">
+                        <TextBlock Text="Телефон:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="phone_numberTB" IsEnabled="False" Height="28" 
+                                VerticalContentAlignment="Center" Padding="8,0" 
+                                Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
+
+                    <!-- Row 2: Пароль -->
+                    <StackPanel Grid.Column="0" Grid.Row="2" Margin="0,5,10,0">
+                        <TextBlock Text="Пароль:" FontWeight="SemiBold" FontSize="11" Foreground="#666"/>
+                        <TextBox x:Name="parolTB" IsEnabled="False" Height="28" 
+                                VerticalContentAlignment="Center" Padding="8,0" 
+                                Background="#FAFAFA" BorderBrush="#DDD" BorderThickness="1"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>

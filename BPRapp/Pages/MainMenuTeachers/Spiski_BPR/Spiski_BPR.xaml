@@ -15,18 +15,13 @@
         <Color x:Key="LightBlue">#E8F4FC</Color>
         <Color x:Key="White">#FFFFFF</Color>
         <Color x:Key="AccentBlue">#4A86C7</Color>
-
         <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
         <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
         <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
-        <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
         <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlue}"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Color="#333333" Opacity="0.15" Direction="315"/>
 
-        <!-- ✨ Тень для карточек -->
-        <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" 
-                          Color="#333333" Opacity="0.15" Direction="315"/>
-
-        <!-- 🔘 Стиль кнопки -->
+        <!-- 🔘 Стили кнопок и контролов -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
             <Setter Property="Foreground" Value="White"/>
@@ -38,8 +33,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}"
-                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -51,8 +45,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- 🔘 Стиль кнопки меню -->
         <Style x:Key="MenuButton" TargetType="Button">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
@@ -66,11 +58,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}"
-                                CornerRadius="8" Padding="{TemplateBinding Padding}"
-                                BorderThickness="1" BorderBrush="{StaticResource LightBlueBrush}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                            VerticalAlignment="Center"/>
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}" BorderThickness="1" BorderBrush="{StaticResource LightBlueBrush}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -82,8 +71,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!-- 🔽 Стиль ComboBox -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#C5D5E5"/>
@@ -95,23 +82,14 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
                                 <ContentPresenter Content="{TemplateBinding Text}" Margin="6,0" VerticalAlignment="Center"/>
                             </Border>
-                            <ToggleButton Grid.Column="1" Focusable="false"
-                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                        ClickMode="Press" HorizontalAlignment="Right" Width="24"
-                                        Background="Transparent" BorderThickness="0">
-                                <Path Data="M0,0 L4,4 L8,0 Z" Fill="{StaticResource DarkBlueBrush}"
-                                      HorizontalAlignment="Center" VerticalAlignment="Center" Width="6" Height="4"/>
+                            <ToggleButton Grid.Column="1" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" HorizontalAlignment="Right" Width="24" Background="Transparent" BorderThickness="0">
+                                <Path Data="M0,0 L4,4 L8,0 Z" Fill="{StaticResource DarkBlueBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="6" Height="4"/>
                             </ToggleButton>
-                            <Popup x:Name="PART_Popup" AllowsTransparency="true"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" PopupAnimation="Slide">
-                                <Border Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}"
-                                        BorderThickness="1" CornerRadius="5" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
+                            <Popup x:Name="PART_Popup" AllowsTransparency="true" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" PopupAnimation="Slide">
+                                <Border Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}" BorderThickness="1" CornerRadius="5" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
                                     <ScrollViewer>
                                         <ItemsPresenter/>
                                     </ScrollViewer>
@@ -124,7 +102,6 @@
         </Style>
     </Page.Resources>
 
-    <!-- 🎨 Градиентный фон -->
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -132,7 +109,6 @@
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -145,17 +121,14 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border Background="White" CornerRadius="24" Width="48" Height="48" 
-                        HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
+                <Border Background="White" CornerRadius="24" Width="48" Height="48" HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
                     <TextBlock Text="📋" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
                     <TextBlock Text="Списки ВПР" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова"
-                               FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
+                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова" FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
                 </StackPanel>
-                <StackPanel x:Name="UserInfoPanel" Grid.Column="1" 
-                            Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <StackPanel x:Name="UserInfoPanel" Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right">
                     <TextBlock x:Name="FioLbl" Text="" FontWeight="Bold" Foreground="White" FontSize="14"/>
                     <TextBlock x:Name="ContactLbl" Text="" Foreground="#E6F2FF" FontSize="11" FontStyle="Italic"/>
                 </StackPanel>
@@ -170,28 +143,23 @@
             </Grid.ColumnDefinitions>
 
             <!-- Левая панель: Меню -->
-            <Border Grid.Column="0" Background="White" CornerRadius="12" 
-                    Padding="15" Effect="{StaticResource CardShadow}">
+            <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="15" Effect="{StaticResource CardShadow}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
-                        <TextBlock Text="📌 Разделы" FontSize="16" FontWeight="Bold" 
-                                   Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
-                        <Button Content="📋 Списки ВПР" Click="OpenSpiski_BPR" Style="{StaticResource MenuButton}"
-                                Background="{StaticResource LightBlueBrush}" BorderBrush="{StaticResource PrimaryBlueBrush}"/>
+                        <TextBlock Text="📌 Разделы" FontSize="16" FontWeight="Bold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
+                        <Button Content="📋 Списки ВПР" Click="OpenSpiski_BPR" Style="{StaticResource MenuButton}" Background="{StaticResource LightBlueBrush}" BorderBrush="{StaticResource PrimaryBlueBrush}"/>
                         <Button Content="📅 Расписание ВПР" Click="OpenRaspisanie_BPR" Style="{StaticResource MenuButton}"/>
                         <Button Content="🔒 Ближайшие ВПР" Click="OpenClosed_BRP" Style="{StaticResource MenuButton}"/>
                         <Button Content="📤 Экспорт/Импорт" Click="OpenExport" Style="{StaticResource MenuButton}"/>
+                        <Button Content="🔔 Настройки уведомлений" Click="OpenNotificationSettings" Style="{StaticResource MenuButton}"/>
                         <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
-                        <TextBlock Text="📚 Справочники" FontSize="16" FontWeight="Bold" 
-                                   Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
+                        <TextBlock Text="📚 Справочники" FontSize="16" FontWeight="Bold" Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
                         <Button Content="📚 Учебные предметы" Click="OpenLessons" Style="{StaticResource MenuButton}"/>
                         <Button Content="🚪 Кабинеты" Click="OpenKabinets" Style="{StaticResource MenuButton}"/>
                         <Button Content="👥 Группы" Click="OpenGroups" Style="{StaticResource MenuButton}"/>
                         <Button Content="🏢 Отделения" Click="OpenDepartments" Style="{StaticResource MenuButton}"/>
                         <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
-                        <!-- 🔹 Кнопка ВЫХОД -->
-                        <Button Content="🚪 Выйти из системы" Click="OpenAuthorization" 
-                                Width="190" Height="45" Margin="5,5,5,15">
+                        <Button Content="🚪 Выйти из системы" Click="OpenAuthorization" Width="190" Height="45" Margin="5,5,5,15">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource MenuButton}">
                                     <Setter Property="Background" Value="#FFE5E5"/>
@@ -209,8 +177,7 @@
             </Border>
 
             <!-- Правая панель: Фильтры и список -->
-            <Border Grid.Column="1" Background="White" CornerRadius="12" 
-                    Padding="20" Margin="20,0,0,0" Effect="{StaticResource CardShadow}">
+            <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="20" Margin="20,0,0,0" Effect="{StaticResource CardShadow}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -219,27 +186,16 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- 🔹 Фильтры: Дата + Группы + Предметы -->
+                    <!-- 🔹 Фильтры -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
-                        <DatePicker x:Name="dateFilterDP" Width="180" Margin="0,0,10,0" 
-                                    Style="{StaticResource {x:Type DatePicker}}"
-                                    SelectedDateChanged="FilterChanged"
-                                    BorderBrush="#C5D5E5" BorderThickness="1"
-                                    Height="32" VerticalContentAlignment="Center"/>
-                        <ComboBox x:Name="groupFilterCB" Width="180" Margin="0,0,10,0" 
-                                  Style="{StaticResource ModernComboBox}"
-                                  DisplayMemberPath="Name" SelectedValuePath="Id"
-                                  SelectionChanged="FilterChanged"/>
-                        <ComboBox x:Name="lessonFilterCB" Width="180" 
-                                  Style="{StaticResource ModernComboBox}"
-                                  DisplayMemberPath="Lesson" SelectedValuePath="Id"
-                                  SelectionChanged="FilterChanged"/>
+                        <DatePicker x:Name="dateFilterDP" Width="180" Margin="0,0,10,0" SelectedDateChanged="FilterChanged" BorderBrush="#C5D5E5" BorderThickness="1" Height="32" VerticalContentAlignment="Center"/>
+                        <ComboBox x:Name="groupFilterCB" Width="180" Margin="0,0,10,0" Style="{StaticResource ModernComboBox}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="FilterChanged"/>
+                        <ComboBox x:Name="lessonFilterCB" Width="180" Style="{StaticResource ModernComboBox}" DisplayMemberPath="Lesson" SelectedValuePath="Id" SelectionChanged="FilterChanged"/>
                     </StackPanel>
 
-                    <!-- 🔹 Кнопка "Мои ВПР" + Сброс фильтров -->
+                    <!-- 🔹 Кнопки -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
-                        <Button Content="🔄 Сбросить фильтры" Click="ResetFilters" Width="150" Height="40" 
-                                Background="#6C757D" Foreground="White" Cursor="Hand" Margin="0,0,10,0">
+                        <Button Content="🔄 Сбросить фильтры" Click="ResetFilters" Width="150" Height="40" Background="#6C757D" Foreground="White" Cursor="Hand" Margin="0,0,10,0">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}" CornerRadius="6">
@@ -248,19 +204,17 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
-                        <Button x:Name="myBPRBtn" Content="Мои ВПР" Width="120" Height="40"
-                                Click="ToggleMyBPR" Style="{StaticResource ModernButton}"/>
+                        <Button x:Name="myBPRBtn" Content="Мои ВПР" Width="120" Height="40" Click="ToggleMyBPR" Style="{StaticResource ModernButton}"/>
                     </StackPanel>
 
-                    <!-- Список ВПР -->
+                    <!-- ✅ СПИСОК С ПРОКРУТКОЙ (исправлено) -->
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
                         <StackPanel x:Name="Spiski_BPRParent" Background="Transparent"/>
                     </ScrollViewer>
 
                     <!-- Кнопка Добавить -->
                     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="➕ Добавить" Click="AddSpisok_BPR" Width="140" Height="35"
-                                Background="{StaticResource PrimaryBlueBrush}" Foreground="White" Cursor="Hand">
+                        <Button Content="➕ Добавить" Click="AddSpisok_BPR" Width="140" Height="35" Background="{StaticResource PrimaryBlueBrush}" Foreground="White" Cursor="Hand">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}" CornerRadius="8">

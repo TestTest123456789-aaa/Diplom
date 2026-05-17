@@ -118,5 +118,15 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
         private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
         private void OpenGroups(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Groups());
         private void OpenDepartments(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Departments.Departments());
+
+        private void OpenNotificationSettings(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(Classes.CurrentUser.Email))
+            {
+                System.Windows.MessageBox.Show("У вас не указан Email. Уведомления недоступны.", "Внимание", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
+            MainWindow.init.frame.Navigate(new Pages.NotificationSettings(Classes.CurrentUser.Email));
+        }
     }
 }

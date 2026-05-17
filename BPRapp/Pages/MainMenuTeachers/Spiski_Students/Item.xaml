@@ -15,10 +15,10 @@
         <Border Background="White" CornerRadius="10" Padding="10" BorderBrush="#C5D5E5" BorderThickness="1" Effect="{StaticResource CardShadow}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,5,0">
                     <Button Click="EditStudent" Width="30" Height="28" Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}" BorderThickness="1.5" Margin="0,0,4,0" ToolTip="Редактировать">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">

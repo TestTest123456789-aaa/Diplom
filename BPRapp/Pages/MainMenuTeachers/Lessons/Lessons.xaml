@@ -123,7 +123,7 @@
                         <Button Content="📅 Расписание ВПР" Click="OpenRaspisanie_BPR" Style="{StaticResource MenuButton}"/>
                         <Button Content="🔒 Ближайшие ВПР" Click="OpenClosed_BRP" Style="{StaticResource MenuButton}"/>
                         <Button Content="📤 Экспорт/Импорт" Click="OpenExport" Style="{StaticResource MenuButton}"/>
-
+                        <Button Content="🔔 Настройки уведомлений" Click="OpenNotificationSettings" Style="{StaticResource MenuButton}"/>
                         <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
 
                         <TextBlock Text="📚 Справочники" FontSize="16" FontWeight="Bold" 

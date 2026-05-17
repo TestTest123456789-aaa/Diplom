@@ -217,6 +217,7 @@
                         <Button Content="🔒 Ближайшие ВПР" Click="OpenClosed_BRP" Style="{StaticResource MenuButton}"
                                 Background="{StaticResource LightBlueBrush}" BorderBrush="{StaticResource PrimaryBlueBrush}"/>
                         <Button Content="📤 Экспорт/Импорт" Click="OpenExport" Style="{StaticResource MenuButton}"/>
+                        <Button Content="🔔 Настройки уведомлений" Click="OpenNotificationSettings" Style="{StaticResource MenuButton}"/>
                         <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
 
                         <!-- 🔹 Справочники -->
