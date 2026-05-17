@@ -100,6 +100,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Background="{StaticResource PrimaryBlueBrush}" Padding="25,20">
@@ -139,9 +140,35 @@
                             <ComboBoxItem Content="Заочная"/>
                         </ComboBox>
                     </StackPanel>
-                    <Button x:Name="saveBtn" Click="SaveStudent" Content="💾 Сохранить" Style="{StaticResource ModernButton}" Width="180" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
         </ScrollViewer>
+
+        <!-- 🔷 Нижняя панель с кнопками -->
+        <Border Grid.Row="2" Background="White" Padding="25,20" BorderBrush="{StaticResource LightBlueBrush}" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- ✅ ДОБАВЛЕНО: Кнопка Назад -->
+                <Button Content="← Назад" Click="GoBack" Width="130" Height="35" 
+                        Background="#6C757D" Foreground="White" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button x:Name="saveBtn" Click="SaveStudent" Content="💾 Сохранить" 
+                        Style="{StaticResource ModernButton}" Width="180" 
+                        Grid.Column="2" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

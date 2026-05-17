@@ -24,14 +24,18 @@ namespace BPRapp.Classes
 
         public static void CloseConnection(MySqlConnection connection) { connection.Close(); MySqlConnection.ClearPool(connection); }
         public static MySqlDataReader Query(string SQL, MySqlConnection connection) => new MySqlCommand(SQL, connection).ExecuteReader();
-        public static MySqlConnection OpenConnection() => new MySqlConnection(Connection.con) { ConnectionString = Connection.con };
+        public static MySqlConnection OpenConnection()
+        {
+            MySqlConnection connection = new MySqlConnection(Connection.con);
+            connection.Open();
+            return connection;
+        }
 
         public static List<Groups> Select()
         {
             List<Groups> AllGroups = new List<Groups>();
             string SQL = "SELECT * FROM `groups`;";
             MySqlConnection connection = OpenConnection();
-            connection.Open();
             MySqlDataReader Data = Query(SQL, connection);
             while (Data.Read())
             {
@@ -49,11 +53,13 @@ namespace BPRapp.Classes
 
         public void Add()
         {
+            // 🔹 ПРОВЕРКА: Название не пустое
             if (string.IsNullOrWhiteSpace(Name))
             {
                 throw new Exception("Название группы не может быть пустым");
             }
 
+            // 🔹 ПРОВЕРКА: Уникальность названия
             var existingGroups = Classes.Groups.Select();
             if (existingGroups.Any(g => g.Name.ToLower() == Name.ToLower() && g.Id != Id))
             {
@@ -61,7 +67,7 @@ namespace BPRapp.Classes
             }
 
             string SQL = "INSERT INTO `groups`(`Name`, `HeadTeacherId`, `DepartmentId`, `SpecialtyId`) VALUES (@Name, @Head, @Dept, @Spec)";
-            MySqlConnection connection = OpenConnection(); connection.Open();
+            MySqlConnection connection = OpenConnection();
             var cmd = new MySqlCommand(SQL, connection);
             cmd.Parameters.AddWithValue("@Name", Name);
             cmd.Parameters.AddWithValue("@Head", (object)HeadTeacherId ?? DBNull.Value);
@@ -85,7 +91,7 @@ namespace BPRapp.Classes
             }
 
             string SQL = "UPDATE `groups` SET `Name`=@Name, `HeadTeacherId`=@Head, `DepartmentId`=@Dept, `SpecialtyId`=@Spec WHERE `Id`=@Id";
-            MySqlConnection connection = OpenConnection(); connection.Open();
+            MySqlConnection connection = OpenConnection();
             var cmd = new MySqlCommand(SQL, connection);
             cmd.Parameters.AddWithValue("@Name", Name);
             cmd.Parameters.AddWithValue("@Head", (object)HeadTeacherId ?? DBNull.Value);
@@ -99,36 +105,35 @@ namespace BPRapp.Classes
         public void Delete()
         {
             MySqlConnection conn = OpenConnection();
-            conn.Open();
+            try
+            {
+                string checkStudentsSQL = "SELECT COUNT(*) FROM student_info WHERE Group_name = @Id";
+                var checkStudentsCmd = new MySqlCommand(checkStudentsSQL, conn);
+                checkStudentsCmd.Parameters.AddWithValue("@Id", Id);
+                int studentCount = Convert.ToInt32(checkStudentsCmd.ExecuteScalar());
+                if (studentCount > 0)
+                {
+                    throw new Exception($"Невозможно удалить группу \"{Name}\": в ней числится {studentCount} студентов.");
+                }
 
-            string checkStudentsSQL = "SELECT COUNT(*) FROM student_info WHERE Group_name = @Id";
-            var checkStudentsCmd = new MySqlCommand(checkStudentsSQL, conn);
-            checkStudentsCmd.Parameters.AddWithValue("@Id", Id);
-            int studentCount = Convert.ToInt32(checkStudentsCmd.ExecuteScalar());
+                string checkBPRSQL = "SELECT COUNT(*) FROM bpr_info WHERE GroupId = @Id";
+                var checkBPRCmd = new MySqlCommand(checkBPRSQL, conn);
+                checkBPRCmd.Parameters.AddWithValue("@Id", Id);
+                int bprCount = Convert.ToInt32(checkBPRCmd.ExecuteScalar());
+                if (bprCount > 0)
+                {
+                    throw new Exception($"Невозможно удалить группу \"{Name}\": она указана в {bprCount} записях ВПР.");
+                }
 
-            if (studentCount > 0)
+                string deleteSQL = "DELETE FROM `groups` WHERE `Id` = @Id";
+                var deleteCmd = new MySqlCommand(deleteSQL, conn);
+                deleteCmd.Parameters.AddWithValue("@Id", Id);
+                deleteCmd.ExecuteNonQuery();
+            }
+            finally
             {
                 CloseConnection(conn);
-                throw new Exception($"Невозможно удалить группу \"{Name}\": в ней числится {studentCount} студентов.");
             }
-
-            string checkBPRSQL = "SELECT COUNT(*) FROM bpr_info WHERE GroupId = @Id";
-            var checkBPRCmd = new MySqlCommand(checkBPRSQL, conn);
-            checkBPRCmd.Parameters.AddWithValue("@Id", Id);
-            int bprCount = Convert.ToInt32(checkBPRCmd.ExecuteScalar());
-
-            if (bprCount > 0)
-            {
-                CloseConnection(conn);
-                throw new Exception($"Невозможно удалить группу \"{Name}\": она указана в {bprCount} записях ВПР.");
-            }
-
-            string deleteSQL = "DELETE FROM `groups` WHERE `Id` = @Id";
-            var deleteCmd = new MySqlCommand(deleteSQL, conn);
-            deleteCmd.Parameters.AddWithValue("@Id", Id);
-            deleteCmd.ExecuteNonQuery();
-
-            CloseConnection(conn);
         }
 
         public string GetHeadTeacherName() => !HeadTeacherId.HasValue ? "Не назначен" : (Users.Select().FirstOrDefault(t => t.Id == HeadTeacherId.Value)?.FIO ?? "Не назначен");

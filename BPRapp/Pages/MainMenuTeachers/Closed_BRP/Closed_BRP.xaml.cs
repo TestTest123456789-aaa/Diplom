@@ -11,6 +11,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
     public partial class Closed_BRP : Page
     {
         private bool _showMyOnly = false;
+        private bool _excludePastBPR = false; // 🔹 Новый фильтр
         private List<Classes.BPR_info> AllBPR_info = new List<Classes.BPR_info>();
         private List<Classes.Users> AllTeachers = new List<Classes.Users>();
         private List<Classes.Lessons> AllLessons = new List<Classes.Lessons>();
@@ -30,7 +31,6 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
                 if (Classes.CurrentUser.IsAuthenticated && !string.IsNullOrEmpty(Classes.CurrentUser.FIO))
                 {
                     FioLbl.Text = Classes.CurrentUser.FIO;
-
                     string contactInfo = "";
                     if (!string.IsNullOrEmpty(Classes.CurrentUser.Email)) contactInfo += Classes.CurrentUser.Email;
                     if (!string.IsNullOrEmpty(Classes.CurrentUser.Phone))
@@ -38,7 +38,6 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
                         if (!string.IsNullOrEmpty(contactInfo)) contactInfo += " | ";
                         contactInfo += Classes.CurrentUser.Phone;
                     }
-
                     ContactLbl.Text = string.IsNullOrEmpty(contactInfo) ? "Контакты не указаны" : contactInfo;
                 }
                 else
@@ -87,14 +86,30 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
         private void ApplyFilters()
         {
             var filtered = AllBPR_info.AsEnumerable();
+
+            // 🔹 Фильтр по преподавателю
             if (teacherFilterCB.SelectedValue is int teacherId && teacherId > 0)
                 filtered = filtered.Where(b => b.Responsible_user == teacherId);
+
+            // 🔹 Фильтр по предмету
             if (lessonFilterCB.SelectedValue is int lessonId && lessonId > 0)
                 filtered = filtered.Where(b => b.Lesson == lessonId);
+
+            // 🔹 Фильтр по группе
             if (groupFilterCB.SelectedValue is int groupId && groupId > 0)
                 filtered = filtered.Where(b => b.GroupId == groupId);
+
+            // 🔹 Фильтр "Мои ВПР"
             if (_showMyOnly && Classes.CurrentUser.IsAuthenticated)
                 filtered = filtered.Where(b => b.Responsible_user == Classes.CurrentUser.UserId);
+
+            // 🔹 ✅ НОВЫЙ ФИЛЬТР: Исключить прошедшие ВПР
+            if (_excludePastBPR)
+            {
+                filtered = filtered.Where(b => !IsBPRPast(b));
+            }
+
+            // 🔹 Сортировка по дате и времени
             var sorted = filtered
                 .OrderBy(b =>
                 {
@@ -102,9 +117,32 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
                         return dt;
                     return DateTime.MaxValue;
                 }).ToList();
+
             Closed_BPRParent.Children.Clear();
             foreach (var bpr in sorted)
                 Closed_BPRParent.Children.Add(new Item(bpr));
+        }
+
+        // 🔹 Метод проверки: является ли ВПР прошедшим
+        private bool IsBPRPast(BPR_info bpr)
+        {
+            try
+            {
+                if (TryParseBPRDateTime(bpr, out var eventTime))
+                {
+                    // ВПР считается прошедшим, если его время окончания < текущего времени
+                    string endTimeStr = bpr.Time.Contains("-") ?
+                        bpr.Time.Split('-')[1].Trim() : bpr.Time.Trim();
+
+                    if (TimeSpan.TryParse(endTimeStr, out var endTimeSpan))
+                    {
+                        var eventEndTime = eventTime.Date + endTimeSpan;
+                        return eventEndTime < DateTime.Now;
+                    }
+                }
+            }
+            catch { }
+            return false;
         }
 
         private bool TryParseBPRDateTime(BPR_info bpr, out DateTime result)
@@ -121,11 +159,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
                     }
                 }
             }
-            catch
-            {
-
-            }
-
+            catch { }
             result = DateTime.MinValue;
             return false;
         }
@@ -143,6 +177,14 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
             ApplyFilters();
         }
 
+        // 🔹 Обработчик изменения состояния фильтра "Исключить прошедшие"
+        private void ExcludePastChanged(object sender, RoutedEventArgs e)
+        {
+            _excludePastBPR = excludePastCB.IsChecked == true;
+            ApplyFilters();
+        }
+
+        // 🔹 Навигация
         private void OpenSpiski_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Spiski_BPR.Spiski_BPR());
         private void OpenRaspisanie_BPR(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Raspisanie_BPR.Raspisanie_BPR());
         private void OpenClosed_BRP(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Closed_BRP.Closed_BRP());
@@ -152,7 +194,6 @@ namespace BPRapp.Pages.MainMenuTeachers.Closed_BRP
         private void OpenExport(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Export.Export());
         private void OpenLessons(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Lessons.Lessons());
         private void OpenKabinets(object sender, RoutedEventArgs e) => MainWindow.init.frame.Navigate(new Pages.MainMenuTeachers.Kabinets.Kabinets());
-
         private void OpenNotificationSettings(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(Classes.CurrentUser.Email))

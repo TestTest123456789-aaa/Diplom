@@ -8,13 +8,17 @@
       Title="Студенты группы">
 
     <Page.Resources>
+        <!-- 🎨 Корпоративные цвета -->
         <Color x:Key="PrimaryBlue">#5B9BD5</Color>
         <Color x:Key="DarkBlue">#2E5C8A</Color>
         <Color x:Key="LightBlue">#E8F4FC</Color>
+        <Color x:Key="White">#FFFFFF</Color>
         <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
         <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
         <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
         <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" Color="#333333" Opacity="0.15" Direction="315"/>
+
+        <!-- 🔘 Стиль кнопки меню -->
         <Style x:Key="MenuButton" TargetType="Button">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
@@ -41,8 +45,29 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- 📝 Стиль TextBox для поиска -->
+        <Style x:Key="SearchTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="5"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
+    <!-- 🎨 Градиентный фон -->
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -55,6 +80,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- 🔷 Заголовок -->
         <Border Grid.Row="0" Background="{StaticResource PrimaryBlueBrush}" Padding="25,20">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -65,26 +91,20 @@
                     <TextBlock Text="👥" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
                 <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                    <!-- 👇 ДОБАВЛЕНО x:Name="TitleLbl" -->
-                    <TextBlock x:Name="TitleLbl" 
-                       Text="Студенты группы" 
-                       FontSize="20" 
-                       FontWeight="Bold" 
-                       Foreground="White"/>
-                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова" 
-                       FontSize="12" 
-                       Foreground="#E6F2FF" 
-                       Margin="0,3,0,0"/>
+                    <TextBlock x:Name="TitleLbl" Text="Студенты группы" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова" FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>
 
+        <!-- 📋 Основное содержимое -->
         <Grid Grid.Row="1" Margin="30">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <!-- Левая панель: Меню -->
             <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="15" Effect="{StaticResource CardShadow}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
@@ -118,6 +138,7 @@
                 </ScrollViewer>
             </Border>
 
+            <!-- Правая панель: Поиск и список студентов -->
             <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="20" Margin="20,0,0,0" Effect="{StaticResource CardShadow}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -125,12 +146,23 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+
+                    <!-- 🔍 Поиск студентов + Счётчик -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
-                        <TextBlock x:Name="CountLbl" Text="Всего: 0" FontWeight="Bold" FontSize="14" Foreground="{StaticResource DarkBlueBrush}" VerticalAlignment="Center"/>
+                        <!-- ✅ ДОБАВЛЕНО: Счётчик студентов -->
+                        <TextBlock x:Name="CountLbl" Text="Всего: 0" FontWeight="Bold" FontSize="14" 
+                                   Foreground="{StaticResource DarkBlueBrush}" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                        <TextBox x:Name="searchStudentTB" Width="250" Style="{StaticResource SearchTextBox}"
+                                 TextChanged="SearchStudent_TextChanged" ToolTip="Введите ФИО для поиска"/>
+                        <TextBlock Text="🔍 Поиск студента..." VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Gray" FontSize="13"/>
                     </StackPanel>
+
+                    <!-- Список студентов -->
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
                         <StackPanel x:Name="ListParent" Background="Transparent"/>
                     </ScrollViewer>
+
+                    <!-- Кнопки -->
                     <StackPanel Grid.Row="2" Orientation="Horizontal">
                         <Button Content="← Назад" Click="GoBack" Width="130" Height="35" Background="#6C757D" Foreground="White" Cursor="Hand">
                             <Button.Template>

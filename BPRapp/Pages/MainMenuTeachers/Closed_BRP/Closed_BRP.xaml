@@ -15,17 +15,14 @@
         <Color x:Key="LightBlue">#E8F4FC</Color>
         <Color x:Key="White">#FFFFFF</Color>
         <Color x:Key="AccentBlue">#4A86C7</Color>
-
         <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}"/>
         <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
         <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
         <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
         <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlue}"/>
-
         <!-- ✨ Тень для карточек -->
         <DropShadowEffect x:Key="CardShadow" BlurRadius="15" ShadowDepth="3" 
                           Color="#333333" Opacity="0.15" Direction="315"/>
-
         <!-- 🔘 Стиль кнопки -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}"/>
@@ -51,7 +48,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- 🔘 Стиль кнопки меню -->
         <Style x:Key="MenuButton" TargetType="Button">
             <Setter Property="Background" Value="White"/>
@@ -82,7 +78,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- 📝 Стиль TextBox -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Background" Value="White"/>
@@ -110,7 +105,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- 🔽 Стиль ComboBox -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Background" Value="White"/>
@@ -150,6 +144,38 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- 🔘 Стиль CheckBox -->
+        <Style x:Key="ModernCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource DarkBlueBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="checkBoxBorder" Width="18" Height="18" 
+                                    Background="White" BorderBrush="{StaticResource PrimaryBlueBrush}" 
+                                    BorderThickness="2" CornerRadius="3">
+                                <Path x:Name="checkMark" Data="M0,4 L4,8 L12,0" 
+                                      Stroke="{StaticResource PrimaryBlueBrush}" 
+                                      StrokeThickness="2" Visibility="Collapsed"/>
+                            </Border>
+                            <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="{StaticResource AccentBlueBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <!-- 🎨 Градиентный фон -->
@@ -160,7 +186,6 @@
                 <GradientStop Color="White" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -173,18 +198,15 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
                 <Border Background="White" CornerRadius="24" Width="48" Height="48" 
                         HorizontalAlignment="Left" Effect="{StaticResource CardShadow}">
                     <TextBlock Text="⏰" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-
                 <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
                     <TextBlock Text="Ближайшие ВПР" FontSize="20" FontWeight="Bold" Foreground="White"/>
                     <TextBlock Text="КГПАОУ Авиационный техникум имени А.Д. Швецова"
                                FontSize="12" Foreground="#E6F2FF" Margin="0,3,0,0"/>
                 </StackPanel>
-
                 <!-- Информация о пользователе -->
                 <StackPanel x:Name="UserInfoPanel" Grid.Column="1" 
                             Margin="0,0,20,0" VerticalAlignment="Center" 
@@ -211,7 +233,6 @@
                     <StackPanel>
                         <TextBlock Text="📌 Разделы" FontSize="16" FontWeight="Bold" 
                                    Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
-
                         <Button Content="📋 Списки ВПР" Click="OpenSpiski_BPR" Style="{StaticResource MenuButton}"/>
                         <Button Content="📅 Расписание ВПР" Click="OpenRaspisanie_BPR" Style="{StaticResource MenuButton}"/>
                         <Button Content="🔒 Ближайшие ВПР" Click="OpenClosed_BRP" Style="{StaticResource MenuButton}"
@@ -219,17 +240,14 @@
                         <Button Content="📤 Экспорт/Импорт" Click="OpenExport" Style="{StaticResource MenuButton}"/>
                         <Button Content="🔔 Настройки уведомлений" Click="OpenNotificationSettings" Style="{StaticResource MenuButton}"/>
                         <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
-
                         <!-- 🔹 Справочники -->
                         <TextBlock Text="📚 Справочники" FontSize="16" FontWeight="Bold" 
-           Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
                         <Button Content="📚 Учебные предметы" Click="OpenLessons" Style="{StaticResource MenuButton}"/>
                         <Button Content="🚪 Кабинеты" Click="OpenKabinets" Style="{StaticResource MenuButton}"/>
                         <Button Content="👥 Группы" Click="OpenGroups" Style="{StaticResource MenuButton}"/>
                         <Button Content="🏢 Отделения" Click="OpenDepartments" Style="{StaticResource MenuButton}"/>
-
                         <Separator Margin="5,10" Background="{StaticResource LightBlueBrush}"/>
-
                         <!-- 🔹 Кнопка ВЫХОД -->
                         <Button Content="🚪 Выйти из системы" Click="OpenAuthorization" Width="190" Height="45" Margin="5,5,5,15">
                             <Button.Style>
@@ -271,8 +289,12 @@
                                   DisplayMemberPath="Name" SelectedValuePath="Id"/>
                     </StackPanel>
 
-                    <!-- Кнопка "Мои ВПР" -->
+                    <!-- 🔹 Фильтры: "Мои ВПР" + "Исключить прошедшие" -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
+                        <!-- ✅ ДОБАВЛЕНО: Чекбокс "Исключить прошедшие ВПР" -->
+                        <CheckBox x:Name="excludePastCB" Content="🚫 Исключить прошедшие" 
+                                  Style="{StaticResource ModernCheckBox}" 
+                                  Margin="0,0,15,0" Checked="ExcludePastChanged" Unchecked="ExcludePastChanged"/>
                         <Button x:Name="myBPRBtn" Content="Мои ВПР" Width="120" 
                                 Click="ToggleMyBPR" Style="{StaticResource ModernButton}"/>
                     </StackPanel>

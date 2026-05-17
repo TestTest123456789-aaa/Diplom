@@ -32,7 +32,6 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
                 headCB.SelectedValue = group.HeadTeacherId ?? 0;
                 deptCB.SelectedValue = group.DepartmentId ?? 0;
                 specCB.SelectedValue = group.SpecialtyId ?? 0;
-
                 BthAdd.Content = "Обновить информацию";
             }
             else
@@ -51,18 +50,11 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
         {
             int? deptId = deptCB.SelectedValue as int?;
             var filtered = new List<Classes.Specialties> { new Classes.Specialties(0, "", "Не указана") };
-
             if (deptId.HasValue && deptId.Value > 0)
-            {
                 filtered.AddRange(_allSpecialties.Where(s => s.DepartmentId == deptId.Value));
-            }
             else
-            {
                 filtered.AddRange(_allSpecialties);
-            }
-
             specCB.ItemsSource = filtered;
-
             if (specCB.SelectedValue is int selectedSpecId && selectedSpecId > 0)
             {
                 bool isValid = filtered.Any(s => s.Id == selectedSpecId);
@@ -72,33 +64,60 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
 
         private void SaveGroup(object sender, RoutedEventArgs e)
         {
+            // 🔹 ВАЛИДАЦИЯ: Все поля обязательны
             if (string.IsNullOrWhiteSpace(nameTB.Text))
             {
-                MessageBox.Show("Введите название группы", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("❗ Введите название группы", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                nameTB.Focus();
+                return;
+            }
+            if (headCB.SelectedValue == null || (headCB.SelectedValue is int h && h == 0))
+            {
+                MessageBox.Show("❗ Выберите руководителя группы", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                headCB.Focus();
+                return;
+            }
+            if (deptCB.SelectedValue == null || (deptCB.SelectedValue is int d && d == 0))
+            {
+                MessageBox.Show("❗ Выберите отделение", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                deptCB.Focus();
+                return;
+            }
+            if (specCB.SelectedValue == null || (specCB.SelectedValue is int s && s == 0))
+            {
+                MessageBox.Show("❗ Выберите специальность", "Ошибка валидации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                specCB.Focus();
                 return;
             }
 
             try
             {
-                int? head = headCB.SelectedValue as int?;
-                int? dept = deptCB.SelectedValue as int?;
-                int? spec = specCB.SelectedValue as int?;
+                int? head = headCB.SelectedValue is int hVal && hVal > 0 ? hVal : (int?)null;
+                int? dept = deptCB.SelectedValue is int dVal && dVal > 0 ? dVal : (int?)null;
+                int? spec = specCB.SelectedValue is int sVal && sVal > 0 ? sVal : (int?)null;
 
                 if (group == null)
                 {
                     new Classes.Groups(0, nameTB.Text.Trim(), head, dept, spec).Add();
-                    MessageBox.Show("Группа добавлена");
+                    MessageBox.Show("✅ Группа успешно добавлена", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
                     new Classes.Groups(group.Id, nameTB.Text.Trim(), head, dept, spec).Update();
-                    MessageBox.Show("Данные обновлены");
+                    MessageBox.Show("✅ Данные группы обновлены", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 MainWindow.init.frame.Navigate(new Groups());
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                // 🔹 Отображаем понятное сообщение на русском
+                string errorMsg = ex.Message;
+                if (errorMsg.Contains("already exists") || errorMsg.Contains("уже существует"))
+                    errorMsg = $"⚠️ Группа с названием \"{nameTB.Text.Trim()}\" уже существует. Пожалуйста, выберите другое название.";
+                else if (errorMsg.Contains("cannot be null") || errorMsg.Contains("не может быть пустым"))
+                    errorMsg = "⚠️ Все поля формы обязательны для заполнения.";
+
+                MessageBox.Show(errorMsg, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

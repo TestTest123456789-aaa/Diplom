@@ -8,7 +8,9 @@ namespace BPRapp.Pages.MainMenuTeachers.Groups
     {
         private int _groupId;
         private Student_Info _student;
+
         public GroupStudentAdd(int groupId) : this(groupId, null) { }
+
         public GroupStudentAdd(int groupId, Student_Info student)
         {
             InitializeComponent();
