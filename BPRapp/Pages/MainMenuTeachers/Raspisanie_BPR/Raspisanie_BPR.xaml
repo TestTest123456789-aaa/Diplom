@@ -82,7 +82,7 @@
             </Setter>
         </Style>
 
-        <!-- 🔽 Стиль ComboBox (добавлен) -->
+        <!-- 🔽 Стиль ComboBox -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#C5D5E5"/>
@@ -126,9 +126,6 @@
         <converters:DayToBackgroundConverter x:Key="DayToBackgroundConverter"/>
         <converters:BoolToVisConverter x:Key="BoolToVisConverter"/>
         <converters:BoolToFontWeightConverter x:Key="BoolToFontWeightConverter"/>
-        <converters:LessonNameConverter x:Key="LessonNameConverter"/>
-        <converters:TeacherNameConverter x:Key="TeacherNameConverter"/>
-        <converters:GroupNameConverter x:Key="GroupNameConverter"/>
     </Page.Resources>
 
     <!-- 🎨 Градиентный фон -->
@@ -201,7 +198,7 @@
 
                         <!-- 🔹 Справочники -->
                         <TextBlock Text="📚 Справочники" FontSize="16" FontWeight="Bold" 
-           Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
+                                   Foreground="{StaticResource DarkBlueBrush}" Margin="0,0,0,15"/>
 
                         <Button Content="📚 Учебные предметы" Click="OpenLessons" Style="{StaticResource MenuButton}"/>
                         <Button Content="🚪 Кабинеты" Click="OpenKabinets" Style="{StaticResource MenuButton}"/>
@@ -237,16 +234,29 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Выбор месяца/года -->
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-                        <ComboBox x:Name="MonthCB" Width="140" SelectionChanged="UpdateCalendar" 
-                                  Margin="0,0,10,0" Style="{StaticResource ModernComboBox}"/>
-                        <ComboBox x:Name="YearCB" Width="100" SelectionChanged="UpdateCalendar" 
-                                  Style="{StaticResource ModernComboBox}"/>
-                    </StackPanel>
+                    <!-- Выбор месяца/года + Фильтр -->
+                    <Grid Grid.Row="0" Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <ComboBox x:Name="MonthCB" Width="140" SelectionChanged="UpdateCalendar" 
+                                      Margin="0,0,10,0" Style="{StaticResource ModernComboBox}"/>
+                            <ComboBox x:Name="YearCB" Width="100" SelectionChanged="UpdateCalendar" 
+                                      Style="{StaticResource ModernComboBox}"/>
+                        </StackPanel>
+
+                        <!-- 🔹 ФИЛЬТР: Мои ВПР / Все ВПР -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="myBPRBtn" Content="Все ВПР" Width="120" 
+                                    Click="ToggleMyBPR" Style="{StaticResource ModernButton}"/>
+                        </StackPanel>
+                    </Grid>
 
                     <!-- Календарь -->
-                    <Grid x:Name="CalendarGrid" Grid.Row="1">
+                    <Grid x:Name="CalendarGrid" Grid.Row="1" VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="*"/>
@@ -282,7 +292,7 @@
                         </Border>
 
                         <!-- Дни месяца -->
-                        <ItemsControl x:Name="DaysIC" Grid.Row="1">
+                        <ItemsControl x:Name="DaysIC" Grid.Row="1" VerticalAlignment="Stretch">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Columns="7" Rows="6"/>
@@ -291,9 +301,9 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="#E0E0E0" BorderThickness="0.5" Padding="5"
-                                            Cursor="Hand" MinHeight="70">
+                                            Cursor="Hand" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                         <Border.ToolTip>
-                                            <ToolTip Placement="Right" MaxWidth="400">
+                                            <ToolTip Placement="Right" MaxWidth="450">
                                                 <StackPanel>
                                                     <TextBlock Text="{Binding Day, StringFormat='📅 {0} число'}"
                                                                FontWeight="Bold" FontSize="14"
@@ -307,21 +317,16 @@
                                                                     <StackPanel>
                                                                         <TextBlock Text="{Binding Time, StringFormat='⏰ {0}'}"
                                                                                    FontWeight="SemiBold" Foreground="{StaticResource DarkBlueBrush}"/>
-                                                                        <TextBlock Margin="0,3,0,0">
-                                                                            <Run Text="📚 "/>
-                                                                            <Run Text="{Binding Path=., Converter={StaticResource LessonNameConverter}}"/>
-                                                                        </TextBlock>
-                                                                        <TextBlock Margin="0,2,0,0">
-                                                                            <Run Text="👨‍🏫 "/>
-                                                                            <Run Text="{Binding Path=., Converter={StaticResource TeacherNameConverter}}"/>
-                                                                        </TextBlock>
-                                                                        <TextBlock Text="{Binding Room, StringFormat='🚪 Кабинет: {0}'}"
-                                                                                   FontStyle="Italic" Margin="0,2,0,0"/>
-                                                                        <TextBlock Margin="0,2,0,0">
-                                                                            <Run Text="👥 "/>
-                                                                            <Run Text="{Binding Path=., Converter={StaticResource GroupNameConverter}}"/>
-                                                                        </TextBlock>
-                                                                        <TextBlock Text="{Binding Count_Students, StringFormat='📝 Студентов: {0}'}"
+                                                                        <TextBlock Margin="0,3,0,0"
+                                                                                   Text="{Binding LessonName, StringFormat='📚 {0}'}"/>
+                                                                        <TextBlock Margin="0,2,0,0"
+                                                                                   Text="{Binding TeacherName, StringFormat='👨‍🏫 {0}'}"/>
+                                                                        <TextBlock Margin="0,2,0,0"
+                                                                                   Text="{Binding RoomName, StringFormat='🚪 Кабинет: {0}'}"
+                                                                                   FontStyle="Italic"/>
+                                                                        <TextBlock Margin="0,2,0,0"
+                                                                                   Text="{Binding GroupName, StringFormat='👥 {0}'}"/>
+                                                                        <TextBlock Text="{Binding StudentCount, StringFormat='📝 Студентов: {0}'}"
                                                                                    FontWeight="SemiBold" Foreground="{StaticResource PrimaryBlueBrush}" Margin="0,3,0,0"/>
                                                                     </StackPanel>
                                                                 </Border>
@@ -331,7 +336,7 @@
                                                 </StackPanel>
                                             </ToolTip>
                                         </Border.ToolTip>
-                                        <Grid>
+                                        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                             <TextBlock Text="{Binding Day}"
                                                        HorizontalAlignment="Right"
                                                        VerticalAlignment="Top"

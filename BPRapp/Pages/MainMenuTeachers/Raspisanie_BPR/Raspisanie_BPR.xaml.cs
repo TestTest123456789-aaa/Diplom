@@ -10,6 +10,7 @@ namespace BPRapp.Pages.MainMenuTeachers.Raspisanie_BPR
     public partial class Raspisanie_BPR : Page
     {
         private List<BPR_info> AllBPRs = new List<BPR_info>();
+        private bool _showMyOnly = false;
 
         public Raspisanie_BPR()
         {
@@ -61,6 +62,16 @@ namespace BPRapp.Pages.MainMenuTeachers.Raspisanie_BPR
         private void LoadAllBPRs()
         {
             AllBPRs = BPR_info.Select();
+            // 🔹 ИСПРАВЛЕНО: Предзагружаем все данные для отображения
+            foreach (var bpr in AllBPRs)
+            {
+                // Принудительно вызываем методы для кэширования данных
+                var lesson = bpr.GetLessonName();
+                var teacher = bpr.GetResponsibleTeacherName();
+                var group = bpr.GetGroupName();
+                var room = bpr.GetRoomName();
+                var count = bpr.GetActualStudentCount();
+            }
         }
 
         private void UpdateCalendar(object sender, RoutedEventArgs e)
@@ -81,10 +92,30 @@ namespace BPRapp.Pages.MainMenuTeachers.Raspisanie_BPR
             if (dayOfWeek == 0) dayOfWeek = 7;
             for (int i = 1; i < dayOfWeek; i++)
                 result.Add(new DayInfo { Day = "", HasEvent = false });
+
             for (int day = 1; day <= daysInMonth; day++)
             {
                 string dateStr = $"{day:D2}.{month:D2}.{year}";
+
+                // 🔹 Фильтрация: Мои ВПР или Все ВПР
                 var dayBPRs = AllBPRs.Where(b => b.Date == dateStr).ToList();
+
+                if (_showMyOnly && Classes.CurrentUser.IsAuthenticated)
+                {
+                    dayBPRs = dayBPRs.Where(b => b.Responsible_user == Classes.CurrentUser.UserId).ToList();
+                }
+
+                // 🔹 Подготавливаем данные для отображения
+                foreach (var bpr in dayBPRs)
+                {
+                    // Убеждаемся, что данные загружены
+                    bpr.GetLessonName();
+                    bpr.GetResponsibleTeacherName();
+                    bpr.GetGroupName();
+                    bpr.GetRoomName();
+                    bpr.GetActualStudentCount();
+                }
+
                 result.Add(new DayInfo
                 {
                     Day = day.ToString(),
@@ -93,6 +124,13 @@ namespace BPRapp.Pages.MainMenuTeachers.Raspisanie_BPR
                 });
             }
             return result;
+        }
+
+        private void ToggleMyBPR(object sender, RoutedEventArgs e)
+        {
+            _showMyOnly = !_showMyOnly;
+            myBPRBtn.Content = _showMyOnly ? "Мои ВПР" : "Все ВПР";
+            UpdateCalendar(null, null);
         }
 
         private void OpenSpiski_BPR(object sender, RoutedEventArgs e) =>

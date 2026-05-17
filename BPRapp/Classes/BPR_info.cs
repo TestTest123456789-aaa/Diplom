@@ -16,6 +16,13 @@ namespace BPRapp.Classes
         public int? GroupId { get; set; }
         public int? RoomId { get; set; }
 
+        // 🔹 ДОБАВЛЕНЫ СВОЙСТВА ДЛЯ ПРИВЯЗКИ В XAML
+        public string LessonName => GetLessonName();
+        public string TeacherName => GetResponsibleTeacherName();
+        public string RoomName => GetRoomName();
+        public string GroupName => GetGroupName();
+        public int StudentCount => GetActualStudentCount();
+
         public BPR_info(int Id, string Date, string Time, int Count_Students,
             int Responsible_user, int Lesson, int? GroupId = null, int? RoomId = null)
         {
@@ -126,13 +133,11 @@ namespace BPRapp.Classes
             }
         }
 
-        // 🔹 ИСПРАВЛЕНО: Читаем все данные в список ПЕРЕД выполнением INSERT
         public void UpdateWithStudentSync(int? oldGroupId)
         {
             Update();
             if (oldGroupId != GroupId && GroupId.HasValue)
             {
-                // 🔹 Сначала читаем ВСЕ данные в память
                 List<string[]> studentsToCopy = new List<string[]>();
 
                 using (MySqlConnection conn = Connection.OpenConnection())
@@ -150,22 +155,18 @@ namespace BPRapp.Classes
                                     reader.GetString("Forma_obychenya")
                                 });
                             }
-                            // 🔹 DataReader автоматически закроется здесь
                         }
                     }
                 }
 
-                // 🔹 Теперь выполняем DELETE и INSERT с НОВЫМ соединением
                 using (MySqlConnection conn = Connection.OpenConnection())
                 {
-                    // Удаляем старых студентов
                     using (MySqlCommand deleteCmd = new MySqlCommand("DELETE FROM student_info WHERE Spisok_BPR_Id = @BPRId", conn))
                     {
                         deleteCmd.Parameters.AddWithValue("@BPRId", Id);
                         deleteCmd.ExecuteNonQuery();
                     }
 
-                    // Вставляем новых студентов
                     foreach (var s in studentsToCopy)
                     {
                         using (MySqlCommand insertCmd = new MySqlCommand(@"INSERT INTO student_info
@@ -185,27 +186,26 @@ namespace BPRapp.Classes
             }
         }
 
-        // 🔹 Кэшированные геттеры для отображения
-        public string GetResponsibleTeacherName() => DataCache.Users.FirstOrDefault(u => u.Id == Responsible_user)?.FIO ?? "Не назначен";
-        public string GetLessonName() => DataCache.Lessons.FirstOrDefault(l => l.Id == Lesson)?.Lesson ?? "Не указан";
-        public string GetGroupName() => GroupId.HasValue ? DataCache.Groups.FirstOrDefault(g => g.Id == GroupId.Value)?.Name ?? "Не указана" : "Не указана";
+        public string GetResponsibleTeacherName() => Users.Select().FirstOrDefault(u => u.Id == Responsible_user)?.FIO ?? "Не назначен";
+        public string GetLessonName() => Lessons.Select().FirstOrDefault(l => l.Id == Lesson)?.Lesson ?? "Не указан";
+        public string GetGroupName() => GroupId.HasValue ? Groups.Select().FirstOrDefault(g => g.Id == GroupId.Value)?.Name ?? "Не указана" : "Не указана";
         public string GetGroupHeadTeacher()
         {
             if (!GroupId.HasValue) return "—";
-            return DataCache.Groups.FirstOrDefault(g => g.Id == GroupId.Value)?.GetHeadTeacherName() ?? "—";
+            return Groups.Select().FirstOrDefault(g => g.Id == GroupId.Value)?.GetHeadTeacherName() ?? "—";
         }
         public string GetRoomName()
         {
             if (!RoomId.HasValue) return "Не указан";
-            var room = DataCache.Rooms.FirstOrDefault(r => r.Id == RoomId.Value);
+            var room = Rooms.Select().FirstOrDefault(r => r.Id == RoomId.Value);
             return room != null ? $"{room.Name} ({room.Capacity} мест)" : "Не указан";
         }
         public string GetGroupSpecialty()
         {
             if (!GroupId.HasValue) return "Не указана";
-            var group = DataCache.Groups.FirstOrDefault(g => g.Id == GroupId.Value);
+            var group = Groups.Select().FirstOrDefault(g => g.Id == GroupId.Value);
             if (group == null || !group.SpecialtyId.HasValue) return "Не указана";
-            var specialty = DataCache.Specialties.FirstOrDefault(s => s.Id == group.SpecialtyId.Value);
+            var specialty = Specialties.Select().FirstOrDefault(s => s.Id == group.SpecialtyId.Value);
             return specialty != null ? $"{specialty.Code} \"{specialty.Name}\"" : "Не указана";
         }
 

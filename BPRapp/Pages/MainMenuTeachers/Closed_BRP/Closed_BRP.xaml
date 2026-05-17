@@ -292,7 +292,7 @@
                     <!-- 🔹 Фильтры: "Мои ВПР" + "Исключить прошедшие" -->
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,15">
                         <!-- ✅ ДОБАВЛЕНО: Чекбокс "Исключить прошедшие ВПР" -->
-                        <CheckBox x:Name="excludePastCB" Content="🚫 Исключить прошедшие" 
+                        <CheckBox x:Name="excludePastCB" Content="🚫 Исключить прошедшие ВПР из списка" 
                                   Style="{StaticResource ModernCheckBox}" 
                                   Margin="0,0,15,0" Checked="ExcludePastChanged" Unchecked="ExcludePastChanged"/>
                         <Button x:Name="myBPRBtn" Content="Мои ВПР" Width="120" 
